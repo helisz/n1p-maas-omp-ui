@@ -6,6 +6,11 @@ import router from './router'
 import { useAuthStore } from './stores/auth'
 import './style.css'
 
+console.log(
+  '%c N1P MaaS OMP UI ',
+  'background: #000000; color: #ffffff; font-size: 14px; font-weight: bold; padding: 6px 12px; border-radius: 4px;'
+)
+
 const app = createApp(App)
 const pinia = createPinia()
 

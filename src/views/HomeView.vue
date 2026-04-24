@@ -48,7 +48,7 @@ async function handleLogin() {
 
       <div class="space-y-10">
         <div class="space-y-4">
-          <h1 class="text-4xl font-bold leading-tight">智信 MaaS · 应用运营管理平台</h1>
+          <h1 class="text-4xl font-bold leading-tight">智信 MaaS 应用运营管理平台</h1>
           <p class="text-lg text-white/70 max-w-md leading-relaxed">
             一站式企业应用运营管理解决方案，以安全为基，以高效为纲，赋能企业数字化升级。
           </p>

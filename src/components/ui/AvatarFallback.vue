@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 const props = defineProps<{ class?: string }>()
 const classes = computed(() =>
-  cn('flex h-full w-full items-center justify-center rounded-full bg-muted', props.class)
+  cn('flex h-full w-full items-center justify-center rounded-full bg-white', props.class)
 )
 </script>
 

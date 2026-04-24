@@ -103,7 +103,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function demoLogin(): Promise<void> {
-    await new Promise((r) => setTimeout(r, 1000))
+    await new Promise((r) => setTimeout(r, 500))
 
     const demoUser: User = {
       name: '管理员',

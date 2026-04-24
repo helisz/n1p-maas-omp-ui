@@ -70,25 +70,31 @@ function navigate(href: string) {
 <template>
   <aside
     :class="cn(
-      'flex h-screen flex-col border-border transition-all duration-300',
+      'relative flex h-screen flex-col overflow-hidden border-border transition-all duration-300',
       collapsed ? 'w-16' : 'w-60'
     )"
   >
+    <!-- Tech background -->
+    <div class="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
+      <div class="tech-lines absolute inset-0"></div>
+      <div class="tech-scan absolute inset-0"></div>
+    </div>
+
     <!-- Logo -->
-    <div class="flex h-14 items-center border-b border-border px-4">
+    <div class="relative z-10 flex h-14 items-center border-b border-white/10 bg-black px-4 text-white">
       <div class="flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-8 w-8 rounded-lg">
-          <rect width="32" height="32" rx="8" fill="#18181B"/>
+          <rect width="32" height="32" rx="8" fill="#333"/>
           <path d="M16 7L7 12.5l9 5.5 9-5.5z" fill="#fff" opacity="0.95"/>
           <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.55" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span v-if="!collapsed" class="text-sm font-semibold text-foreground">运营管理平台</span>
+        <span v-if="!collapsed" class="text-sm font-semibold">应用运营管理平台</span>
       </div>
     </div>
 
     <!-- Search -->
-    <div v-if="!collapsed" class="border-r bg-sidebar p-3">
+    <div v-if="!collapsed" class="relative z-10 border-r bg-sidebar p-3">
       <div class="relative">
         <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input placeholder="搜索..." class="h-9 pl-8 text-sm bg-muted/50 border-0" />
@@ -96,7 +102,7 @@ function navigate(href: string) {
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-1 space-y-1 overflow-y-auto bg-sidebar border-r px-3 py-2">
+    <nav class="relative z-10 flex-1 space-y-1 overflow-y-auto bg-sidebar border-r px-3 py-2">
       <template v-for="(group, gi) in menuGroups" :key="gi">
         <div v-if="group.label && !collapsed" class="pt-4 pb-1 px-3 text-[12px]  uppercase tracking-wider text-muted-foreground/50">
           {{ group.label }}
@@ -120,7 +126,7 @@ function navigate(href: string) {
     </nav>
 
     <!-- Collapse Button -->
-    <div class="border-t border-border border-r bg-sidebar  p-3">
+    <div class="relative z-10 border-t border-border border-r bg-sidebar  p-3">
       <button
         @click="collapsed = !collapsed"
         class="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
@@ -133,4 +139,34 @@ function navigate(href: string) {
     </div>
   </aside>
 </template>
+
+<style scoped>
+.tech-lines {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.tech-scan {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.02) 40%,
+    rgba(0, 0, 0, 0.06) 50%,
+    rgba(0, 0, 0, 0.02) 60%,
+    transparent 100%
+  );
+  animation: techScan 6s linear infinite;
+}
+
+@keyframes techScan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+</style>
 <!-- [AI_END LINES=84 TIMESTAMP=2025-06-20 06:30:00] -->
