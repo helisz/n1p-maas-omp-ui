@@ -15,7 +15,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    port: 3001,
   },
 })
 // [AI_END LINES=15 TIMESTAMP=2025-06-15 12:00:00]

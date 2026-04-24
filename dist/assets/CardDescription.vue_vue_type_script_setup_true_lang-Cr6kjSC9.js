@@ -1,0 +1,1 @@
+import{c as a}from"./settings-UEeCCdEi.js";import{d as r,o as c,c as n,n as l,q as p,b as m}from"./index-CnSLs4h-.js";const f=r({__name:"CardDescription",props:{class:{}},setup(s){const e=s,o=m(()=>a("text-sm text-muted-foreground",e.class));return(t,d)=>(c(),n("p",{class:l(o.value)},[p(t.$slots,"default")],2))}});export{f as _};
