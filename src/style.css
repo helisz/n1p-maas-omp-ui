@@ -122,4 +122,16 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Prevent Chart.js canvas from creating scrollbars globally */
+  .chart-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .chart-container canvas {
+    max-width: 100% !important;
+    height: auto !important;
+    overflow: hidden !important;
+  }
 }

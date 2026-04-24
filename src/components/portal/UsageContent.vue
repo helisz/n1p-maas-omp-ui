@@ -1,6 +1,8 @@
-<!-- [AI_START TIMESTAMP=2025-06-20 06:35:00] -->
+<!-- [AI_START TIMESTAMP=2025-06-20 08:00:00] -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { Bar } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 import Card from '@/components/ui/Card.vue'
 import CardHeader from '@/components/ui/CardHeader.vue'
 import CardTitle from '@/components/ui/CardTitle.vue'
@@ -14,10 +16,16 @@ import TableBody from '@/components/ui/TableBody.vue'
 import TableRow from '@/components/ui/TableRow.vue'
 import TableHead from '@/components/ui/TableHead.vue'
 import TableCell from '@/components/ui/TableCell.vue'
+import Select from '@/components/ui/Select.vue'
+import SelectTrigger from '@/components/ui/SelectTrigger.vue'
+import SelectContent from '@/components/ui/SelectContent.vue'
+import SelectItem from '@/components/ui/SelectItem.vue'
 import {
   Activity, TrendingUp, Users, Clock, Search, Brain,
   AlertTriangle, CheckCircle2,
 } from 'lucide-vue-next'
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const stats = [
   { title: '今日总调用', value: '128,456', icon: Activity, change: '+8.5%' },
@@ -26,33 +34,155 @@ const stats = [
   { title: '平均延迟', value: '245', unit: 'ms', icon: Clock, change: '-5%' },
 ]
 
-const modelUsages = [
-  { model: 'GPT-4o', provider: 'OpenAI', totalCalls: 456000, tokens: '1.2B', avgLatency: '210ms', status: 'normal', errorRate: '0.1%' },
-  { model: 'Claude 3.5 Sonnet', provider: 'Anthropic', totalCalls: 234000, tokens: '680M', avgLatency: '320ms', status: 'normal', errorRate: '0.2%' },
-  { model: 'DeepSeek V3', provider: 'DeepSeek', totalCalls: 189000, tokens: '420M', avgLatency: '180ms', status: 'normal', errorRate: '0.05%' },
-  { model: 'Gemini 1.5 Pro', provider: 'Google', totalCalls: 98000, tokens: '310M', avgLatency: '280ms', status: 'warning', errorRate: '0.8%' },
-  { model: 'Qwen2.5 72B', provider: 'Alibaba Cloud', totalCalls: 67000, tokens: '190M', avgLatency: '260ms', status: 'normal', errorRate: '0.15%' },
-]
+const trendDataMap: Record<string, { date: string; calls: number }[]> = {
+  '7d': [
+    { date: '03-10', calls: 112000 }, { date: '03-11', calls: 128000 },
+    { date: '03-12', calls: 135000 }, { date: '03-13', calls: 142000 },
+    { date: '03-14', calls: 138000 }, { date: '03-15', calls: 156000 },
+    { date: '03-16', calls: 148000 },
+  ],
+  '30d': [
+    { date: '02-15', calls: 85000 }, { date: '02-17', calls: 92000 },
+    { date: '02-19', calls: 88000 }, { date: '02-21', calls: 105000 },
+    { date: '02-23', calls: 98000 }, { date: '02-25', calls: 115000 },
+    { date: '02-27', calls: 108000 }, { date: '03-01', calls: 125000 },
+    { date: '03-03', calls: 118000 }, { date: '03-05', calls: 132000 },
+    { date: '03-07', calls: 128000 }, { date: '03-09', calls: 135000 },
+    { date: '03-11', calls: 142000 }, { date: '03-13', calls: 148000 },
+    { date: '03-15', calls: 156000 },
+  ],
+  '90d': [
+    { date: '12-18', calls: 65000 }, { date: '12-23', calls: 72000 },
+    { date: '12-28', calls: 78000 }, { date: '01-02', calls: 82000 },
+    { date: '01-07', calls: 88000 }, { date: '01-12', calls: 95000 },
+    { date: '01-17', calls: 92000 }, { date: '01-22', calls: 105000 },
+    { date: '01-27', calls: 110000 }, { date: '02-01', calls: 108000 },
+    { date: '02-06', calls: 115000 }, { date: '02-11', calls: 122000 },
+    { date: '02-16', calls: 118000 }, { date: '02-21', calls: 128000 },
+    { date: '02-26', calls: 135000 }, { date: '03-03', calls: 132000 },
+    { date: '03-08', calls: 142000 }, { date: '03-13', calls: 148000 },
+    { date: '03-16', calls: 156000 },
+  ],
+}
 
-const customerUsages = [
-  { company: '华为云科技', callsToday: 45000, callsMonth: 320000, quotaUsed: 85, status: 'normal' },
-  { company: '阿里云数', callsToday: 38000, callsMonth: 280000, quotaUsed: 78, status: 'normal' },
-  { company: '腾讯云智', callsToday: 32000, callsMonth: 210000, quotaUsed: 92, status: 'warning' },
-  { company: '百度智能', callsToday: 21000, callsMonth: 150000, quotaUsed: 65, status: 'normal' },
-  { company: '字节跳动', callsToday: 18000, callsMonth: 120000, quotaUsed: 45, status: 'normal' },
-]
+const modelDataMap: Record<string, { model: string; provider: string; totalCalls: number; tokens: string; avgLatency: string; status: 'normal' | 'warning'; errorRate: string }[]> = {
+  '7d': [
+    { model: 'GPT-4o', provider: 'OpenAI', totalCalls: 98000, tokens: '260M', avgLatency: '210ms', status: 'normal', errorRate: '0.1%' },
+    { model: 'Claude 3.5 Sonnet', provider: 'Anthropic', totalCalls: 52000, tokens: '150M', avgLatency: '320ms', status: 'normal', errorRate: '0.2%' },
+    { model: 'DeepSeek V3', provider: 'DeepSeek', totalCalls: 41000, tokens: '92M', avgLatency: '180ms', status: 'normal', errorRate: '0.05%' },
+    { model: 'Gemini 1.5 Pro', provider: 'Google', totalCalls: 23000, tokens: '72M', avgLatency: '280ms', status: 'warning', errorRate: '0.8%' },
+    { model: 'Qwen2.5 72B', provider: 'Alibaba Cloud', totalCalls: 18000, tokens: '51M', avgLatency: '260ms', status: 'normal', errorRate: '0.15%' },
+  ],
+  '30d': [
+    { model: 'GPT-4o', provider: 'OpenAI', totalCalls: 456000, tokens: '1.2B', avgLatency: '210ms', status: 'normal', errorRate: '0.1%' },
+    { model: 'Claude 3.5 Sonnet', provider: 'Anthropic', totalCalls: 234000, tokens: '680M', avgLatency: '320ms', status: 'normal', errorRate: '0.2%' },
+    { model: 'DeepSeek V3', provider: 'DeepSeek', totalCalls: 189000, tokens: '420M', avgLatency: '180ms', status: 'normal', errorRate: '0.05%' },
+    { model: 'Gemini 1.5 Pro', provider: 'Google', totalCalls: 98000, tokens: '310M', avgLatency: '280ms', status: 'warning', errorRate: '0.8%' },
+    { model: 'Qwen2.5 72B', provider: 'Alibaba Cloud', totalCalls: 67000, tokens: '190M', avgLatency: '260ms', status: 'normal', errorRate: '0.15%' },
+  ],
+  '90d': [
+    { model: 'GPT-4o', provider: 'OpenAI', totalCalls: 1380000, tokens: '3.6B', avgLatency: '210ms', status: 'normal', errorRate: '0.1%' },
+    { model: 'Claude 3.5 Sonnet', provider: 'Anthropic', totalCalls: 720000, tokens: '2.1B', avgLatency: '320ms', status: 'normal', errorRate: '0.2%' },
+    { model: 'DeepSeek V3', provider: 'DeepSeek', totalCalls: 580000, tokens: '1.3B', avgLatency: '180ms', status: 'normal', errorRate: '0.05%' },
+    { model: 'Gemini 1.5 Pro', provider: 'Google', totalCalls: 310000, tokens: '980M', avgLatency: '280ms', status: 'warning', errorRate: '0.8%' },
+    { model: 'Qwen2.5 72B', provider: 'Alibaba Cloud', totalCalls: 210000, tokens: '590M', avgLatency: '260ms', status: 'normal', errorRate: '0.15%' },
+  ],
+}
 
-const dailyStats = [
-  { date: '03-10', calls: 120000 }, { date: '03-11', calls: 135000 },
-  { date: '03-12', calls: 128000 }, { date: '03-13', calls: 142000 },
-  { date: '03-14', calls: 138000 }, { date: '03-15', calls: 156000 },
-  { date: '03-16', calls: 128456 },
-]
+const customerDataMap: Record<string, { company: string; callsPeriod: number; callsMonth: number; quotaUsed: number; status: 'normal' | 'warning' }[]> = {
+  '7d': [
+    { company: '华为云科技', callsPeriod: 10500, callsMonth: 320000, quotaUsed: 85, status: 'normal' },
+    { company: '阿里云数', callsPeriod: 8900, callsMonth: 280000, quotaUsed: 78, status: 'normal' },
+    { company: '腾讯云智', callsPeriod: 7400, callsMonth: 210000, quotaUsed: 92, status: 'warning' },
+    { company: '百度智能', callsPeriod: 5200, callsMonth: 150000, quotaUsed: 65, status: 'normal' },
+    { company: '字节跳动', callsPeriod: 4100, callsMonth: 120000, quotaUsed: 45, status: 'normal' },
+  ],
+  '30d': [
+    { company: '华为云科技', callsPeriod: 320000, callsMonth: 320000, quotaUsed: 85, status: 'normal' },
+    { company: '阿里云数', callsPeriod: 280000, callsMonth: 280000, quotaUsed: 78, status: 'normal' },
+    { company: '腾讯云智', callsPeriod: 210000, callsMonth: 210000, quotaUsed: 92, status: 'warning' },
+    { company: '百度智能', callsPeriod: 150000, callsMonth: 150000, quotaUsed: 65, status: 'normal' },
+    { company: '字节跳动', callsPeriod: 120000, callsMonth: 120000, quotaUsed: 45, status: 'normal' },
+  ],
+  '90d': [
+    { company: '华为云科技', callsPeriod: 980000, callsMonth: 320000, quotaUsed: 85, status: 'normal' },
+    { company: '阿里云数', callsPeriod: 860000, callsMonth: 280000, quotaUsed: 78, status: 'normal' },
+    { company: '腾讯云智', callsPeriod: 640000, callsMonth: 210000, quotaUsed: 92, status: 'warning' },
+    { company: '百度智能', callsPeriod: 450000, callsMonth: 150000, quotaUsed: 65, status: 'normal' },
+    { company: '字节跳动', callsPeriod: 360000, callsMonth: 120000, quotaUsed: 45, status: 'normal' },
+  ],
+}
+
+const trendRange = ref('7d')
+const modelRange = ref('30d')
+const customerRange = ref('30d')
+
+const trendData = computed(() => trendDataMap[trendRange.value] || trendDataMap['7d'])
+const modelUsages = computed(() => modelDataMap[modelRange.value] || modelDataMap['30d'])
+const customerUsages = computed(() => customerDataMap[customerRange.value] || customerDataMap['30d'])
+
+const chartData = computed(() => ({
+  labels: trendData.value.map(d => d.date),
+  datasets: [
+    {
+      label: 'API 调用量',
+      data: trendData.value.map(d => d.calls),
+      backgroundColor: '#374151',
+      borderColor: '#374151',
+      borderWidth: 0,
+      borderRadius: 0,
+      barPercentage: 0.6,
+      categoryPercentage: 0.8,
+    },
+  ],
+}))
+
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: 'rgba(0,0,0,0.85)',
+      titleColor: '#fff',
+      bodyColor: '#fff',
+      padding: 10,
+      cornerRadius: 6,
+      displayColors: false,
+      callbacks: {
+        label: (context: any) => `调用量: ${Number(context.raw).toLocaleString()}`,
+      },
+    },
+  },
+  scales: {
+    x: {
+      grid: { display: false },
+      ticks: {
+        color: '#6b7280',
+        font: { size: 11 },
+      },
+      border: { display: false },
+    },
+    y: {
+      beginAtZero: true,
+      grid: {
+        color: 'rgba(0,0,0,0.06)',
+        drawBorder: false,
+      },
+      ticks: {
+        color: '#6b7280',
+        font: { size: 11 },
+        callback: (value: any) => `${Number(value) / 1000}k`,
+      },
+      border: { display: false },
+    },
+  },
+}
 
 const searchQuery = ref('')
 
 const filteredModels = computed(() =>
-  modelUsages.filter(m =>
+  modelUsages.value.filter(m =>
     m.model.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
     m.provider.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
@@ -85,15 +215,24 @@ const filteredModels = computed(() =>
     <!-- Daily Trend -->
     <Card>
       <CardHeader>
-        <CardTitle>近7日调用趋势</CardTitle>
-        <CardDescription>平台每日 API 调用总量</CardDescription>
+        <div class="flex items-center justify-between">
+          <div>
+            <CardTitle>调用趋势</CardTitle>
+            <CardDescription>平台每日 API 调用总量</CardDescription>
+          </div>
+          <Select v-model="trendRange">
+            <SelectTrigger class="w-28" />
+            <SelectContent>
+              <SelectItem value="7d">近7日</SelectItem>
+              <SelectItem value="30d">近30日</SelectItem>
+              <SelectItem value="90d">近90日</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </CardHeader>
       <CardContent>
-        <div class="flex items-end gap-3 h-48">
-          <div v-for="stat in dailyStats" :key="stat.date" class="flex-1 flex flex-col items-center gap-1">
-            <div class="w-full bg-primary/20 rounded-t" :style="{ height: `${(stat.calls / 160000) * 100}%` }" />
-            <span class="text-xs text-muted-foreground">{{ stat.date }}</span>
-          </div>
+        <div class="relative h-96">
+          <Bar :data="chartData" :options="chartOptions" class="w-full" style="display: block; width: 100%; height: 100%;" />
         </div>
       </CardContent>
     </Card>
@@ -104,11 +243,21 @@ const filteredModels = computed(() =>
         <div class="flex items-center justify-between">
           <div>
             <CardTitle>模型用量排行</CardTitle>
-            <CardDescription>各模型本月累计调用统计</CardDescription>
+            <CardDescription>各模型累计调用统计</CardDescription>
           </div>
-          <div class="relative">
-            <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input v-model="searchQuery" placeholder="搜索模型..." class="w-64 pl-8" />
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input v-model="searchQuery" placeholder="搜索模型..." class="w-64 pl-8" />
+            </div>
+            <Select v-model="modelRange">
+              <SelectTrigger class="w-28" />
+              <SelectContent>
+                <SelectItem value="7d">近7日</SelectItem>
+                <SelectItem value="30d">近30日</SelectItem>
+                <SelectItem value="90d">近90日</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </CardHeader>
@@ -150,15 +299,27 @@ const filteredModels = computed(() =>
     <!-- Customer Usage TOP -->
     <Card>
       <CardHeader>
-        <CardTitle>客户用量 TOP5</CardTitle>
-        <CardDescription>本月调用量最高的企业客户</CardDescription>
+        <div class="flex items-center justify-between">
+          <div>
+            <CardTitle>客户用量 TOP5</CardTitle>
+            <CardDescription>调用量最高的企业客户</CardDescription>
+          </div>
+          <Select v-model="customerRange">
+            <SelectTrigger class="w-28" />
+            <SelectContent>
+              <SelectItem value="7d">近7日</SelectItem>
+              <SelectItem value="30d">近30日</SelectItem>
+              <SelectItem value="90d">近90日</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>企业名称</TableHead>
-              <TableHead>今日调用</TableHead>
+              <TableHead>当前周期调用</TableHead>
               <TableHead>本月累计</TableHead>
               <TableHead>配额使用率</TableHead>
               <TableHead>状态</TableHead>
@@ -167,7 +328,7 @@ const filteredModels = computed(() =>
           <TableBody>
             <TableRow v-for="c in customerUsages" :key="c.company">
               <TableCell class="font-medium">{{ c.company }}</TableCell>
-              <TableCell>{{ c.callsToday.toLocaleString() }}</TableCell>
+              <TableCell>{{ c.callsPeriod.toLocaleString() }}</TableCell>
               <TableCell>{{ c.callsMonth.toLocaleString() }}</TableCell>
               <TableCell>
                 <div class="flex items-center gap-2">
@@ -192,4 +353,17 @@ const filteredModels = computed(() =>
     </Card>
   </div>
 </template>
-<!-- [AI_END LINES=154 TIMESTAMP=2025-06-20 06:35:00] -->
+<style scoped>
+/* Prevent Chart.js canvas from creating scrollbars */
+:deep(.chart-container) {
+  position: relative;
+  overflow: hidden;
+}
+
+:deep(.chart-container canvas) {
+  max-width: 100% !important;
+  height: auto !important;
+  overflow: hidden !important;
+}
+</style>
+<!-- [AI_END LINES=220 TIMESTAMP=2025-06-20 08:00:00] -->
