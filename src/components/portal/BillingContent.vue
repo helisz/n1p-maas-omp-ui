@@ -1,4 +1,4 @@
-<!-- [AI_START TIMESTAMP=2025-06-15 12:00:00] -->
+<!-- [AI_START TIMESTAMP=2025-06-20 06:45:00] -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import Card from '@/components/ui/Card.vue'
@@ -8,11 +8,7 @@ import CardDescription from '@/components/ui/CardDescription.vue'
 import CardContent from '@/components/ui/CardContent.vue'
 import Button from '@/components/ui/Button.vue'
 import Badge from '@/components/ui/Badge.vue'
-import Tabs from '@/components/ui/Tabs.vue'
-import TabsList from '@/components/ui/TabsList.vue'
-import TabsTrigger from '@/components/ui/TabsTrigger.vue'
-import TabsContent from '@/components/ui/TabsContent.vue'
-import Progress from '@/components/ui/Progress.vue'
+import Input from '@/components/ui/Input.vue'
 import Table from '@/components/ui/Table.vue'
 import TableHeader from '@/components/ui/TableHeader.vue'
 import TableBody from '@/components/ui/TableBody.vue'
@@ -26,30 +22,45 @@ import DialogTitle from '@/components/ui/DialogTitle.vue'
 import DialogDescription from '@/components/ui/DialogDescription.vue'
 import DialogFooter from '@/components/ui/DialogFooter.vue'
 import {
-  Download, FileText, Receipt, CreditCard, TrendingUp,
-  AlertCircle, CheckCircle2, Clock, Building2,
+  Search, CheckCircle2, Clock, FileText, TrendingUp,
+  AlertCircle, Eye, Download,
 } from 'lucide-vue-next'
 
 const bills = [
-  { id: 'BILL202403', month: '2024年3月', amount: 12997, status: 'unpaid', dueDate: '2024-04-15', items: [{ name: 'GPT-4 企业版', amount: 5999 }, { name: 'Embedding 基础版', amount: 999 }, { name: '超量调用费用', amount: 5999 }] },
-  { id: 'BILL202402', month: '2024年2月', amount: 6998, status: 'paid', paidAt: '2024-03-10', items: [{ name: 'GPT-4 企业版', amount: 5999 }, { name: 'Embedding 基础版', amount: 999 }] },
-  { id: 'BILL202401', month: '2024年1月', amount: 5999, status: 'paid', paidAt: '2024-02-08', items: [{ name: 'GPT-4 企业版', amount: 5999 }] },
-]
-
-const usageStats = [
-  { package: 'GPT-4 企业版', quota: 200000, used: 189456, overage: 0, overagePrice: 0.05 },
-  { package: 'Embedding 基础版', quota: 100000, used: 78000, overage: 0, overagePrice: 0.01 },
-  { package: 'Claude 基础版', quota: 50000, used: 62000, overage: 12000, overagePrice: 0.08 },
+  { id: 'BILL202403', company: '华为云科技', month: '2024年3月', amount: 12997, status: 'unpaid', dueDate: '2024-04-15' },
+  { id: 'BILL202402', company: '阿里云数', month: '2024年2月', amount: 6998, status: 'paid', paidAt: '2024-03-10' },
+  { id: 'BILL202401', company: '腾讯云智', month: '2024年1月', amount: 5999, status: 'paid', paidAt: '2024-02-08' },
+  { id: 'BILL202403002', company: '百度智能', month: '2024年3月', amount: 3200, status: 'unpaid', dueDate: '2024-04-15' },
+  { id: 'BILL202402002', company: '字节跳动', month: '2024年2月', amount: 25998, status: 'paid', paidAt: '2024-03-05' },
 ]
 
 const invoices = [
-  { id: 'INV202403001', billId: 'BILL202402', type: '增值税专用发票', amount: 6998, status: 'issued', issuedAt: '2024-03-15' },
-  { id: 'INV202402001', billId: 'BILL202401', type: '增值税专用发票', amount: 5999, status: 'issued', issuedAt: '2024-02-20' },
+  { id: 'INV202403001', company: '华为云科技', billId: 'BILL202402', type: '增值税专用发票', amount: 6998, status: 'issued', issuedAt: '2024-03-15' },
+  { id: 'INV202403002', company: '阿里云数', billId: 'BILL202401', type: '增值税普通发票', amount: 5999, status: 'pending', issuedAt: '-' },
+  { id: 'INV202402001', company: '字节跳动', billId: 'BILL202402', type: '增值税专用发票', amount: 25998, status: 'issued', issuedAt: '2024-03-10' },
 ]
 
-const invoiceDialogOpen = ref(false)
+const statusConfig: Record<string, { label: string; variant: 'default' | 'outline' | 'secondary' | 'destructive'; icon: typeof CheckCircle2; color: string }> = {
+  paid: { label: '已支付', variant: 'outline', icon: CheckCircle2, color: 'text-green-500' },
+  unpaid: { label: '待支付', variant: 'outline', icon: Clock, color: 'text-yellow-500' },
+}
+
+const invoiceStatusConfig: Record<string, { label: string; variant: 'default' | 'outline' | 'secondary' | 'destructive'; icon: typeof CheckCircle2; color: string }> = {
+  issued: { label: '已开具', variant: 'outline', icon: CheckCircle2, color: 'text-green-500' },
+  pending: { label: '待开具', variant: 'outline', icon: Clock, color: 'text-yellow-500' },
+}
+
+const searchQuery = ref('')
 const billDetailOpen = ref(false)
 const selectedBill = ref<typeof bills[0] | null>(null)
+
+const filteredBills = computed(() =>
+  bills.filter(
+    (b) =>
+      b.id.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      b.company.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+)
 
 function handleViewBill(bill: typeof bills[0]) {
   selectedBill.value = bill
@@ -57,148 +68,151 @@ function handleViewBill(bill: typeof bills[0]) {
 }
 
 const totalUnpaid = computed(() => bills.filter((b) => b.status === 'unpaid').reduce((acc, b) => acc + b.amount, 0))
+const pendingInvoices = computed(() => invoices.filter((i) => i.status === 'pending').length)
 </script>
 
 <template>
   <div class="space-y-6">
     <div>
-      <h2 class="text-2xl font-semibold text-foreground">账单与计费</h2>
-      <p class="text-muted-foreground">查看账单、用量统计和发票管理</p>
+      <h2 class="text-2xl font-semibold text-foreground">账单管理</h2>
+      <p class="text-muted-foreground">查看全平台客户账单与发票申请</p>
     </div>
 
     <div class="grid gap-4 md:grid-cols-4">
       <Card>
-        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">待支付账单</CardTitle></CardHeader>
-        <CardContent>
-          <div class="text-2xl font-bold text-destructive">¥{{ totalUnpaid.toLocaleString() }}</div>
-          <p class="text-xs text-muted-foreground">{{ bills.filter((b) => b.status === 'unpaid').length }} 笔待支付</p>
-        </CardContent>
+        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">本月账单</CardTitle></CardHeader>
+        <CardContent><div class="text-2xl font-bold">{{ bills.length }}</div></CardContent>
       </Card>
       <Card>
-        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">本月消费</CardTitle></CardHeader>
-        <CardContent>
-          <div class="text-2xl font-bold">¥12,997</div>
-          <div class="flex items-center text-xs text-muted-foreground"><TrendingUp class="mr-1 h-3 w-3 text-green-500" />较上月 +85%</div>
-        </CardContent>
+        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">待支付金额</CardTitle></CardHeader>
+        <CardContent><div class="text-2xl font-bold text-destructive">¥{{ totalUnpaid.toLocaleString() }}</div></CardContent>
       </Card>
       <Card>
-        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">累计消费</CardTitle></CardHeader>
-        <CardContent><div class="text-2xl font-bold">¥25,994</div><p class="text-xs text-muted-foreground">自 2024 年起</p></CardContent>
+        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">已收款</CardTitle></CardHeader>
+        <CardContent><div class="text-2xl font-bold text-green-600">¥{{ bills.filter((b) => b.status === 'paid').reduce((acc, b) => acc + b.amount, 0).toLocaleString() }}</div></CardContent>
       </Card>
       <Card>
-        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">账户余额</CardTitle></CardHeader>
-        <CardContent><div class="text-2xl font-bold text-green-600">¥5,000</div><Button variant="link" class="h-auto p-0 text-xs">充值</Button></CardContent>
+        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">待开发票</CardTitle></CardHeader>
+        <CardContent><div class="text-2xl font-bold text-yellow-600">{{ pendingInvoices }} 笔</div></CardContent>
       </Card>
     </div>
 
-    <Tabs default-value="bills" class="space-y-4">
-      <TabsList>
-        <TabsTrigger value="bills">我的账单</TabsTrigger>
-        <TabsTrigger value="usage">用量统计</TabsTrigger>
-        <TabsTrigger value="invoices">发票管理</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value="bills">
-        <Card>
-          <CardHeader><CardTitle>账单列表</CardTitle><CardDescription>按月查看消费明细</CardDescription></CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader><TableRow><TableHead>账单月份</TableHead><TableHead>账单编号</TableHead><TableHead>应付金额</TableHead><TableHead>支付状态</TableHead><TableHead class="text-right">操作</TableHead></TableRow></TableHeader>
-              <TableBody>
-                <TableRow v-for="bill in bills" :key="bill.id">
-                  <TableCell class="font-medium">{{ bill.month }}</TableCell>
-                  <TableCell class="font-mono text-sm">{{ bill.id }}</TableCell>
-                  <TableCell class="font-medium">¥{{ bill.amount.toLocaleString() }}</TableCell>
-                  <TableCell>
-                    <Badge v-if="bill.status === 'paid'" variant="outline" class="gap-1"><CheckCircle2 class="h-3 w-3 text-green-500" />已支付</Badge>
-                    <Badge v-else variant="outline" class="gap-1"><Clock class="h-3 w-3 text-yellow-500" />待支付</Badge>
-                  </TableCell>
-                  <TableCell class="text-right">
-                    <div class="flex justify-end gap-2">
-                      <Button variant="ghost" size="sm" @click="handleViewBill(bill)">查看</Button>
-                      <Button variant="ghost" size="sm"><Download class="mr-1 h-3 w-3" />下载</Button>
-                      <Button v-if="bill.status === 'unpaid'" size="sm">去支付</Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </TabsContent>
-
-      <TabsContent value="usage">
-        <Card>
-          <CardHeader><CardTitle>用量统计</CardTitle><CardDescription>各套餐额度使用情况</CardDescription></CardHeader>
-          <CardContent class="space-y-6">
-            <div v-for="stat in usageStats" :key="stat.package" class="space-y-3">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="font-medium">{{ stat.package }}</p>
-                  <p class="text-sm text-muted-foreground">已用 {{ stat.used.toLocaleString() }} / 额度 {{ stat.quota.toLocaleString() }} 次</p>
+    <Card>
+      <CardHeader>
+        <div class="flex items-center justify-between">
+          <CardTitle>账单列表</CardTitle>
+          <div class="relative">
+            <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input v-model="searchQuery" placeholder="搜索账单号或企业..." class="w-64 pl-8" />
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>账单编号</TableHead>
+              <TableHead>企业名称</TableHead>
+              <TableHead>账单月份</TableHead>
+              <TableHead>应付金额</TableHead>
+              <TableHead>支付状态</TableHead>
+              <TableHead>到期日</TableHead>
+              <TableHead class="text-right">操作</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="bill in filteredBills" :key="bill.id">
+              <TableCell class="font-mono text-sm">{{ bill.id }}</TableCell>
+              <TableCell class="font-medium">{{ bill.company }}</TableCell>
+              <TableCell>{{ bill.month }}</TableCell>
+              <TableCell class="font-medium">¥{{ bill.amount.toLocaleString() }}</TableCell>
+              <TableCell>
+                <Badge :variant="statusConfig[bill.status].variant" class="gap-1">
+                  <component :is="statusConfig[bill.status].icon" :class="['h-3 w-3', statusConfig[bill.status].color]" />
+                  {{ statusConfig[bill.status].label }}
+                </Badge>
+              </TableCell>
+              <TableCell class="text-muted-foreground">{{ bill.dueDate }}</TableCell>
+              <TableCell class="text-right">
+                <div class="flex justify-end gap-2">
+                  <Button variant="ghost" size="sm" @click="handleViewBill(bill)"><Eye class="mr-1 h-3 w-3" />详情</Button>
+                  <Button variant="ghost" size="sm"><Download class="mr-1 h-3 w-3" />导出</Button>
                 </div>
-                <Badge v-if="stat.overage > 0" variant="outline" class="gap-1"><AlertCircle class="h-3 w-3 text-red-500" />超量 {{ stat.overage.toLocaleString() }} 次</Badge>
-              </div>
-              <Progress :value="Math.min(Math.round((stat.used / stat.quota) * 100), 100)" />
-              <p v-if="stat.overage > 0" class="text-xs text-destructive">超量费用：¥{{ (stat.overage * stat.overagePrice).toLocaleString() }}</p>
-            </div>
-          </CardContent>
-        </Card>
-      </TabsContent>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
 
-      <TabsContent value="invoices">
-        <Card>
-          <CardHeader>
-            <div class="flex items-center justify-between">
-              <div><CardTitle>发票管理</CardTitle><CardDescription>查看和管理开票记录</CardDescription></div>
-              <Button @click="invoiceDialogOpen = true"><FileText class="mr-2 h-4 w-4" />申请开票</Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader><TableRow><TableHead>发票编号</TableHead><TableHead>发票类型</TableHead><TableHead>金额</TableHead><TableHead>状态</TableHead><TableHead>开具日期</TableHead></TableRow></TableHeader>
-              <TableBody>
-                <TableRow v-for="inv in invoices" :key="inv.id">
-                  <TableCell class="font-mono text-sm">{{ inv.id }}</TableCell>
-                  <TableCell>{{ inv.type }}</TableCell>
-                  <TableCell class="font-medium">¥{{ inv.amount.toLocaleString() }}</TableCell>
-                  <TableCell><Badge variant="outline" class="gap-1"><CheckCircle2 class="h-3 w-3 text-green-500" />已开具</Badge></TableCell>
-                  <TableCell class="text-muted-foreground">{{ inv.issuedAt }}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </TabsContent>
-    </Tabs>
+    <Card>
+      <CardHeader>
+        <div class="flex items-center justify-between">
+          <div>
+            <CardTitle>发票申请</CardTitle>
+            <CardDescription>客户提交的发票开具申请</CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>发票编号</TableHead>
+              <TableHead>企业名称</TableHead>
+              <TableHead>发票类型</TableHead>
+              <TableHead>金额</TableHead>
+              <TableHead>状态</TableHead>
+              <TableHead>开具日期</TableHead>
+              <TableHead class="text-right">操作</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="inv in invoices" :key="inv.id">
+              <TableCell class="font-mono text-sm">{{ inv.id }}</TableCell>
+              <TableCell class="font-medium">{{ inv.company }}</TableCell>
+              <TableCell>{{ inv.type }}</TableCell>
+              <TableCell class="font-medium">¥{{ inv.amount.toLocaleString() }}</TableCell>
+              <TableCell>
+                <Badge :variant="invoiceStatusConfig[inv.status].variant" class="gap-1">
+                  <component :is="invoiceStatusConfig[inv.status].icon" :class="['h-3 w-3', invoiceStatusConfig[inv.status].color]" />
+                  {{ invoiceStatusConfig[inv.status].label }}
+                </Badge>
+              </TableCell>
+              <TableCell class="text-muted-foreground">{{ inv.issuedAt }}</TableCell>
+              <TableCell class="text-right">
+                <Button v-if="inv.status === 'pending'" size="sm">开具发票</Button>
+                <Button v-else variant="ghost" size="sm">查看</Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
 
-    <!-- Bill Detail Dialog -->
     <Dialog v-model:open="billDetailOpen">
       <DialogContent>
-        <DialogHeader><DialogTitle>账单详情</DialogTitle><DialogDescription>{{ selectedBill?.month }} 账单明细</DialogDescription></DialogHeader>
+        <DialogHeader>
+          <DialogTitle>账单详情</DialogTitle>
+          <DialogDescription>{{ selectedBill?.company }} - {{ selectedBill?.month }} 账单</DialogDescription>
+        </DialogHeader>
         <div v-if="selectedBill" class="space-y-3">
-          <div v-for="item in selectedBill.items" :key="item.name" class="flex justify-between">
-            <span>{{ item.name }}</span><span class="font-medium">¥{{ item.amount.toLocaleString() }}</span>
+          <div class="flex justify-between"><span class="text-muted-foreground">账单编号</span><span class="font-mono">{{ selectedBill.id }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">企业名称</span><span class="font-medium">{{ selectedBill.company }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">账单月份</span><span>{{ selectedBill.month }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">应付金额</span><span class="font-medium">¥{{ selectedBill.amount.toLocaleString() }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">支付状态</span>
+            <Badge :variant="statusConfig[selectedBill.status].variant" class="gap-1">
+              <component :is="statusConfig[selectedBill.status].icon" :class="['h-3 w-3', statusConfig[selectedBill.status].color]" />
+              {{ statusConfig[selectedBill.status].label }}
+            </Badge>
           </div>
-          <div class="border-t pt-2 flex justify-between font-bold"><span>合计</span><span>¥{{ selectedBill.amount.toLocaleString() }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">到期日</span><span>{{ selectedBill.dueDate }}</span></div>
+          <div v-if="selectedBill.paidAt" class="flex justify-between"><span class="text-muted-foreground">支付时间</span><span>{{ selectedBill.paidAt }}</span></div>
         </div>
         <DialogFooter><Button variant="outline" @click="billDetailOpen = false">关闭</Button></DialogFooter>
       </DialogContent>
     </Dialog>
-
-    <!-- Invoice Dialog -->
-    <Dialog v-model:open="invoiceDialogOpen">
-      <DialogContent>
-        <DialogHeader><DialogTitle>申请开票</DialogTitle><DialogDescription>选择需要开具发票的账单</DialogDescription></DialogHeader>
-        <div class="space-y-3">
-          <div v-for="bill in bills.filter(b => b.status === 'paid')" :key="bill.id" class="flex items-center justify-between rounded-lg border p-3">
-            <div><p class="font-medium">{{ bill.month }}</p><p class="text-sm text-muted-foreground">¥{{ bill.amount.toLocaleString() }}</p></div>
-            <Button size="sm" variant="outline">选择</Button>
-          </div>
-        </div>
-        <DialogFooter><Button variant="outline" @click="invoiceDialogOpen = false">取消</Button></DialogFooter>
-      </DialogContent>
-    </Dialog>
   </div>
 </template>
-<!-- [AI_END LINES=143 TIMESTAMP=2025-06-15 12:00:00] -->
+<!-- [AI_END LINES=130 TIMESTAMP=2025-06-20 06:45:00] -->

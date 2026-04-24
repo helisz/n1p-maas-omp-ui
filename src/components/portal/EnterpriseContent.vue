@@ -1,6 +1,6 @@
-<!-- [AI_START TIMESTAMP=2025-06-15 12:00:00] -->
+<!-- [AI_START TIMESTAMP=2025-06-20 06:45:00] -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import Card from '@/components/ui/Card.vue'
 import CardHeader from '@/components/ui/CardHeader.vue'
 import CardTitle from '@/components/ui/CardTitle.vue'
@@ -9,8 +9,12 @@ import CardContent from '@/components/ui/CardContent.vue'
 import Button from '@/components/ui/Button.vue'
 import Badge from '@/components/ui/Badge.vue'
 import Input from '@/components/ui/Input.vue'
-import Label from '@/components/ui/Label.vue'
-import Separator from '@/components/ui/Separator.vue'
+import Table from '@/components/ui/Table.vue'
+import TableHeader from '@/components/ui/TableHeader.vue'
+import TableBody from '@/components/ui/TableBody.vue'
+import TableRow from '@/components/ui/TableRow.vue'
+import TableHead from '@/components/ui/TableHead.vue'
+import TableCell from '@/components/ui/TableCell.vue'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
@@ -18,174 +22,167 @@ import DialogTitle from '@/components/ui/DialogTitle.vue'
 import DialogDescription from '@/components/ui/DialogDescription.vue'
 import DialogFooter from '@/components/ui/DialogFooter.vue'
 import {
-  Building2, CheckCircle2, ShieldCheck, Edit, Upload,
-  Key, RefreshCw,
+  Search, Building2, CheckCircle2, Clock, XCircle,
+  Eye, ShieldCheck, Lock,
 } from 'lucide-vue-next'
 
-const enterpriseInfo = {
-  name: '中科云数科技有限公司', creditCode: '91110108MA01XXXXXX', legalPerson: '张三',
-  contactPerson: '李四', contactPhone: '138****8888', contactEmail: 'admin@zhongkeyunshu.com',
-  address: '北京市海淀区中关村科技园区XX号', registeredAt: '2024-01-15', verifiedAt: '2024-01-16', status: 'verified',
+const enterprises = [
+  { id: 'ENT001', name: '华为云科技', creditCode: '91110108MA01XXXX01', contact: '张三', phone: '138****8888', email: 'admin@huawei.com', status: 'verified', registeredAt: '2024-01-15', uKeyBound: true },
+  { id: 'ENT002', name: '阿里云数', creditCode: '91110108MA01XXXX02', contact: '李四', phone: '139****6666', email: 'admin@aliyun.com', status: 'verified', registeredAt: '2024-02-01', uKeyBound: true },
+  { id: 'ENT003', name: '腾讯云智', creditCode: '91110108MA01XXXX03', contact: '王五', phone: '137****9999', email: 'admin@tencent.com', status: 'pending', registeredAt: '2024-03-10', uKeyBound: false },
+  { id: 'ENT004', name: '百度智能', creditCode: '91110108MA01XXXX04', contact: '赵六', phone: '136****5555', email: 'admin@baidu.com', status: 'verified', registeredAt: '2024-01-20', uKeyBound: true },
+  { id: 'ENT005', name: '字节跳动', creditCode: '91110108MA01XXXX05', contact: '孙七', phone: '135****7777', email: 'admin@bytedance.com', status: 'frozen', registeredAt: '2024-02-15', uKeyBound: true },
+]
+
+const statusConfig: Record<string, { label: string; variant: 'default' | 'outline' | 'secondary' | 'destructive'; icon: typeof CheckCircle2; color: string }> = {
+  verified: { label: '已认证', variant: 'outline', icon: CheckCircle2, color: 'text-green-500' },
+  pending: { label: '待审核', variant: 'outline', icon: Clock, color: 'text-yellow-500' },
+  frozen: { label: '已冻结', variant: 'secondary', icon: XCircle, color: 'text-red-500' },
 }
 
-const uKeyInfo = {
-  serialNumber: 'CITIC2024XXXXXXXX', boundAt: '2024-01-16 10:30:00',
-  expiry: '2025-01-16', status: 'active', lastUsed: '2024-03-15 14:32:00',
+const searchQuery = ref('')
+const detailOpen = ref(false)
+const selectedEnterprise = ref<typeof enterprises[0] | null>(null)
+
+const filteredEnterprises = computed(() =>
+  enterprises.filter(
+    (e) =>
+      e.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      e.creditCode.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      e.contact.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+)
+
+function handleViewDetail(ent: typeof enterprises[0]) {
+  selectedEnterprise.value = ent
+  detailOpen.value = true
 }
 
-const editDialogOpen = ref(false)
-const rebindDialogOpen = ref(false)
+const stats = computed(() => ({
+  total: enterprises.length,
+  verified: enterprises.filter((e) => e.status === 'verified').length,
+  pending: enterprises.filter((e) => e.status === 'pending').length,
+  frozen: enterprises.filter((e) => e.status === 'frozen').length,
+}))
 </script>
 
 <template>
   <div class="space-y-6">
     <div>
-      <h2 class="text-2xl font-semibold text-foreground">企业信息管理</h2>
-      <p class="text-muted-foreground">查看和管理企业认证信息</p>
+      <h2 class="text-2xl font-semibold text-foreground">企业客户</h2>
+      <p class="text-muted-foreground">管理平台所有企业客户与认证状态</p>
     </div>
 
-    <div class="grid gap-6 lg:grid-cols-2">
-      <!-- Basic Info -->
+    <div class="grid gap-4 md:grid-cols-4">
       <Card>
-        <CardHeader>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10"><Building2 class="h-5 w-5 text-primary" /></div>
-              <div><CardTitle>企业基本信息</CardTitle><CardDescription>工商注册信息</CardDescription></div>
-            </div>
-            <Badge variant="outline" class="gap-1"><CheckCircle2 class="h-3 w-3 text-green-500" />已认证</Badge>
-          </div>
-        </CardHeader>
-        <CardContent class="space-y-4">
-          <div class="grid gap-4">
-            <div class="space-y-1"><Label class="text-muted-foreground">企业名称</Label><p class="font-medium">{{ enterpriseInfo.name }}</p></div>
-            <div class="space-y-1"><Label class="text-muted-foreground">统一社会信用代码</Label><p class="font-mono">{{ enterpriseInfo.creditCode }}</p></div>
-            <div class="space-y-1"><Label class="text-muted-foreground">法定代表人</Label><p>{{ enterpriseInfo.legalPerson }}</p></div>
-            <div class="space-y-1"><Label class="text-muted-foreground">企业地址</Label><p>{{ enterpriseInfo.address }}</p></div>
-          </div>
-          <Separator />
-          <div class="flex items-center justify-between text-sm text-muted-foreground">
-            <span>注册时间：{{ enterpriseInfo.registeredAt }}</span>
-            <span>认证时间：{{ enterpriseInfo.verifiedAt }}</span>
-          </div>
-        </CardContent>
+        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">总客户数</CardTitle></CardHeader>
+        <CardContent><div class="text-2xl font-bold">{{ stats.total }}</div></CardContent>
       </Card>
-
-      <!-- Contact Info -->
       <Card>
-        <CardHeader>
-          <div class="flex items-center justify-between">
-            <div><CardTitle>联系人信息</CardTitle><CardDescription>企业管理员联系方式</CardDescription></div>
-            <Button variant="outline" size="sm" @click="editDialogOpen = true"><Edit class="mr-1 h-3 w-3" />修改</Button>
-          </div>
-        </CardHeader>
-        <CardContent class="space-y-4">
-          <div class="grid gap-4">
-            <div class="space-y-1"><Label class="text-muted-foreground">联系人</Label><p class="font-medium">{{ enterpriseInfo.contactPerson }}</p></div>
-            <div class="space-y-1"><Label class="text-muted-foreground">联系电话</Label><p>{{ enterpriseInfo.contactPhone }}</p></div>
-            <div class="space-y-1"><Label class="text-muted-foreground">联系邮箱</Label><p>{{ enterpriseInfo.contactEmail }}</p></div>
-          </div>
-        </CardContent>
+        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">已认证</CardTitle></CardHeader>
+        <CardContent><div class="text-2xl font-bold text-green-600">{{ stats.verified }}</div></CardContent>
       </Card>
-
-      <!-- UKey Binding -->
-      <Card class="lg:col-span-2">
-        <CardHeader>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-50"><ShieldCheck class="h-5 w-5 text-cyan-600" /></div>
-              <div><CardTitle>网银Key绑定状态</CardTitle><CardDescription>中信网银Key认证信息</CardDescription></div>
-            </div>
-            <Badge class="gap-1"><CheckCircle2 class="h-3 w-3" />已绑定</Badge>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div class="grid gap-6 md:grid-cols-2">
-            <div class="space-y-4">
-              <div class="space-y-1"><Label class="text-muted-foreground">Key 序列号</Label><p class="font-mono">{{ uKeyInfo.serialNumber }}</p></div>
-              <div class="space-y-1"><Label class="text-muted-foreground">绑定时间</Label><p>{{ uKeyInfo.boundAt }}</p></div>
-              <div class="space-y-1"><Label class="text-muted-foreground">证书有效期</Label><p>{{ uKeyInfo.expiry }}</p></div>
-            </div>
-            <div class="space-y-4">
-              <div class="space-y-1"><Label class="text-muted-foreground">最近使用</Label><p>{{ uKeyInfo.lastUsed }}</p></div>
-              <div class="space-y-1"><Label class="text-muted-foreground">状态</Label><Badge variant="outline" class="gap-1"><CheckCircle2 class="h-3 w-3 text-green-500" />正常</Badge></div>
-            </div>
-          </div>
-          <Separator class="my-4" />
-          <div class="flex gap-2">
-            <Button variant="outline" @click="rebindDialogOpen = true"><RefreshCw class="mr-2 h-4 w-4" />重新绑定</Button>
-            <Button variant="outline"><Key class="mr-2 h-4 w-4" />测试认证</Button>
-          </div>
-        </CardContent>
+      <Card>
+        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">待审核</CardTitle></CardHeader>
+        <CardContent><div class="text-2xl font-bold text-yellow-600">{{ stats.pending }}</div></CardContent>
       </Card>
-
-      <!-- Qualification Documents -->
-      <Card class="lg:col-span-2">
-        <CardHeader><CardTitle>资质文件</CardTitle><CardDescription>企业认证上传的资质文件</CardDescription></CardHeader>
-        <CardContent>
-          <div class="grid gap-4 md:grid-cols-3">
-            <div class="rounded-lg border p-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="flex h-10 w-10 items-center justify-center rounded bg-muted"><Building2 class="h-5 w-5 text-muted-foreground" /></div>
-                  <div><p class="font-medium">营业执照</p><p class="text-xs text-muted-foreground">business_license.pdf</p></div>
-                </div>
-                <Badge variant="outline" class="text-green-600">已上传</Badge>
-              </div>
-            </div>
-            <div class="rounded-lg border p-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="flex h-10 w-10 items-center justify-center rounded bg-muted"><ShieldCheck class="h-5 w-5 text-muted-foreground" /></div>
-                  <div><p class="font-medium">法人身份证</p><p class="text-xs text-muted-foreground">legal_person_id.pdf</p></div>
-                </div>
-                <Badge variant="outline" class="text-green-600">已上传</Badge>
-              </div>
-            </div>
-            <div class="rounded-lg border border-dashed p-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="flex h-10 w-10 items-center justify-center rounded bg-muted"><Upload class="h-5 w-5 text-muted-foreground" /></div>
-                  <div><p class="font-medium">其他资质</p><p class="text-xs text-muted-foreground">可选上传</p></div>
-                </div>
-                <Button variant="ghost" size="sm">上传</Button>
-              </div>
-            </div>
-          </div>
-        </CardContent>
+      <Card>
+        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">已冻结</CardTitle></CardHeader>
+        <CardContent><div class="text-2xl font-bold text-red-600">{{ stats.frozen }}</div></CardContent>
       </Card>
     </div>
 
-    <!-- Edit Dialog -->
-    <Dialog v-model:open="editDialogOpen">
-      <DialogContent>
-        <DialogHeader><DialogTitle>修改联系人信息</DialogTitle><DialogDescription>更新企业管理员联系方式</DialogDescription></DialogHeader>
-        <div class="space-y-4">
-          <div class="space-y-2"><Label for="contactPerson">联系人</Label><Input id="contactPerson" :default-value="enterpriseInfo.contactPerson" /></div>
-          <div class="space-y-2"><Label for="contactPhone">联系电话</Label><Input id="contactPhone" :default-value="enterpriseInfo.contactPhone" /></div>
-          <div class="space-y-2"><Label for="contactEmail">联系邮箱</Label><Input id="contactEmail" type="email" :default-value="enterpriseInfo.contactEmail" /></div>
+    <Card>
+      <CardHeader>
+        <div class="flex items-center justify-between">
+          <CardTitle>企业列表</CardTitle>
+          <div class="relative">
+            <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input v-model="searchQuery" placeholder="搜索企业名称、统一信用代码或联系人..." class="w-80 pl-8" />
+          </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" @click="editDialogOpen = false">取消</Button>
-          <Button @click="editDialogOpen = false">保存</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>企业名称</TableHead>
+              <TableHead>统一信用代码</TableHead>
+              <TableHead>联系人</TableHead>
+              <TableHead>联系电话</TableHead>
+              <TableHead>认证状态</TableHead>
+              <TableHead>网银Key</TableHead>
+              <TableHead>注册时间</TableHead>
+              <TableHead class="text-right">操作</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="ent in filteredEnterprises" :key="ent.id">
+              <TableCell class="font-medium">{{ ent.name }}</TableCell>
+              <TableCell class="font-mono text-sm">{{ ent.creditCode }}</TableCell>
+              <TableCell>{{ ent.contact }}</TableCell>
+              <TableCell>{{ ent.phone }}</TableCell>
+              <TableCell>
+                <Badge :variant="statusConfig[ent.status].variant" class="gap-1">
+                  <component :is="statusConfig[ent.status].icon" :class="['h-3 w-3', statusConfig[ent.status].color]" />
+                  {{ statusConfig[ent.status].label }}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Badge v-if="ent.uKeyBound" variant="outline" class="gap-1">
+                  <ShieldCheck class="h-3 w-3 text-green-500" />已绑定
+                </Badge>
+                <Badge v-else variant="outline" class="gap-1">
+                  <Lock class="h-3 w-3 text-muted-foreground" />未绑定
+                </Badge>
+              </TableCell>
+              <TableCell class="text-muted-foreground">{{ ent.registeredAt }}</TableCell>
+              <TableCell class="text-right">
+                <div class="flex justify-end gap-2">
+                  <Button variant="ghost" size="sm" @click="handleViewDetail(ent)"><Eye class="mr-1 h-3 w-3" />详情</Button>
+                  <Button v-if="ent.status === 'pending'" size="sm">审核</Button>
+                  <Button v-if="ent.status === 'verified'" variant="ghost" size="sm" class="text-destructive">冻结</Button>
+                  <Button v-if="ent.status === 'frozen'" variant="ghost" size="sm">解冻</Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
 
-    <!-- Rebind Dialog -->
-    <Dialog v-model:open="rebindDialogOpen">
+    <Dialog v-model:open="detailOpen">
       <DialogContent>
-        <DialogHeader><DialogTitle>重新绑定网银Key</DialogTitle><DialogDescription>请插入新的网银Key设备后点击确认</DialogDescription></DialogHeader>
-        <div class="flex items-center gap-3 rounded-lg bg-muted p-4">
-          <ShieldCheck class="h-5 w-5 text-muted-foreground" />
-          <p class="text-sm text-muted-foreground">重新绑定后，旧的网银Key将立即失效</p>
+        <DialogHeader>
+          <DialogTitle>企业详情</DialogTitle>
+          <DialogDescription>查看企业客户详细信息</DialogDescription>
+        </DialogHeader>
+        <div v-if="selectedEnterprise" class="space-y-3">
+          <div class="flex justify-between"><span class="text-muted-foreground">企业名称</span><span class="font-medium">{{ selectedEnterprise.name }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">企业ID</span><span class="font-mono">{{ selectedEnterprise.id }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">统一信用代码</span><span class="font-mono">{{ selectedEnterprise.creditCode }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">联系人</span><span>{{ selectedEnterprise.contact }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">联系电话</span><span>{{ selectedEnterprise.phone }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">联系邮箱</span><span>{{ selectedEnterprise.email }}</span></div>
+          <div class="flex justify-between"><span class="text-muted-foreground">认证状态</span>
+            <Badge :variant="statusConfig[selectedEnterprise.status].variant" class="gap-1">
+              <component :is="statusConfig[selectedEnterprise.status].icon" :class="['h-3 w-3', statusConfig[selectedEnterprise.status].color]" />
+              {{ statusConfig[selectedEnterprise.status].label }}
+            </Badge>
+          </div>
+          <div class="flex justify-between"><span class="text-muted-foreground">网银Key</span>
+            <Badge v-if="selectedEnterprise.uKeyBound" variant="outline" class="gap-1">
+              <ShieldCheck class="h-3 w-3 text-green-500" />已绑定
+            </Badge>
+            <Badge v-else variant="outline" class="gap-1">
+              <Lock class="h-3 w-3 text-muted-foreground" />未绑定
+            </Badge>
+          </div>
+          <div class="flex justify-between"><span class="text-muted-foreground">注册时间</span><span>{{ selectedEnterprise.registeredAt }}</span></div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" @click="rebindDialogOpen = false">取消</Button>
-          <Button @click="rebindDialogOpen = false">确认重新绑定</Button>
-        </DialogFooter>
+        <DialogFooter><Button variant="outline" @click="detailOpen = false">关闭</Button></DialogFooter>
       </DialogContent>
     </Dialog>
   </div>
 </template>
-<!-- [AI_END LINES=143 TIMESTAMP=2025-06-15 12:00:00] -->
+<!-- [AI_END LINES=130 TIMESTAMP=2025-06-20 06:45:00] -->

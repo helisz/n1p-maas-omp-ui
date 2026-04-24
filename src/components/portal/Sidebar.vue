@@ -1,4 +1,4 @@
-<!-- [AI_START TIMESTAMP=2025-06-15 12:00:00] -->
+<!-- [AI_START TIMESTAMP=2025-06-20 06:30:00] -->
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -7,13 +7,12 @@ import {
   LayoutDashboard,
   Package,
   ShoppingCart,
-  Server,
   Brain,
   Wallet,
   Receipt,
   FileText,
   Building2,
-  Users,
+  Activity,
   ChevronLeft,
   Search,
 } from 'lucide-vue-next'
@@ -24,33 +23,41 @@ const router = useRouter()
 const collapsed = ref(false)
 const menuGroups = [
   {
-// [AI_START TIMESTAMP=2025-06-17 10:15:00]
     items: [
       { title: '控制台首页', href: '/dashboard', icon: LayoutDashboard },
     ],
   },
   {
-    label: '服务',
+    label: '服务管理',
     items: [
-      { title: '服务订购', href: '/packages', icon: Package },
-      { title: '模型广场', href: '/models', icon: Brain },
-      { title: '我的订单', href: '/orders', icon: ShoppingCart },
-      { title: '服务管理', href: '/services', icon: Server },
+      { title: '套餐管理', href: '/packages', icon: Package },
+      { title: '模型管理', href: '/models', icon: Brain },
     ],
   },
   {
-    label: '费用',
+    label: '交易管理',
     items: [
-      { title: '智信钱包', href: '/wallet', icon: Wallet },
-      { title: '账单与计费', href: '/billing', icon: Receipt },
+      { title: '订单管理', href: '/orders', icon: ShoppingCart },
     ],
   },
   {
-    label: '管理',
+    label: '财务中心',
     items: [
-      { title: '企业信息管理', href: '/enterprise', icon: Building2 },
-      { title: '子账号与权限', href: '/accounts', icon: Users },
-      { title: '操作审计', href: '/audit', icon: FileText },
+      { title: '资金管理', href: '/wallet', icon: Wallet },
+      { title: '账单管理', href: '/billing', icon: Receipt },
+    ],
+  },
+  {
+    label: '客户管理',
+    items: [
+      { title: '企业客户', href: '/enterprise', icon: Building2 },
+    ],
+  },
+  {
+    label: '运营监控',
+    items: [
+      { title: '用量监控', href: '/usage', icon: Activity },
+      { title: '审计日志', href: '/audit', icon: FileText },
     ],
   },
 ]
@@ -68,7 +75,6 @@ function navigate(href: string) {
     )"
   >
     <!-- Logo -->
-    <!-- [AI_START TIMESTAMP=2025-06-18 08:00:00] -->
     <div class="flex h-14 items-center border-b border-border px-4">
       <div class="flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-8 w-8 rounded-lg">
@@ -77,10 +83,9 @@ function navigate(href: string) {
           <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.55" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span v-if="!collapsed" class="text-sm font-semibold text-foreground">智信MaaS服务管理平台</span>
+        <span v-if="!collapsed" class="text-sm font-semibold text-foreground">运营管理平台</span>
       </div>
     </div>
-    <!-- [AI_END LINES=16 TIMESTAMP=2025-06-18 08:00:00] -->
 
     <!-- Search -->
     <div v-if="!collapsed" class="border-r bg-sidebar p-3">
@@ -128,4 +133,4 @@ function navigate(href: string) {
     </div>
   </aside>
 </template>
-<!-- [AI_END LINES=84 TIMESTAMP=2025-06-15 12:00:00] -->
+<!-- [AI_END LINES=84 TIMESTAMP=2025-06-20 06:30:00] -->
