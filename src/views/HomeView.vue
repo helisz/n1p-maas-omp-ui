@@ -33,8 +33,14 @@ async function handleLogin() {
 <template>
   <div class="flex min-h-screen w-full">
     <!-- Left Panel: Black background, platform introduction -->
-    <div class="hidden lg:flex lg:w-1/2 flex-col justify-between bg-black text-white p-12">
-      <div>
+    <div class="relative hidden lg:flex lg:w-1/2 flex-col justify-between overflow-hidden bg-black text-white p-12">
+      <!-- Tech background -->
+      <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <div class="tech-lines absolute inset-0"></div>
+        <div class="tech-scan absolute inset-0"></div>
+      </div>
+
+      <div class="relative z-10">
         <div class="flex items-center gap-3">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-8 w-8 rounded-lg">
             <rect width="32" height="32" rx="8" fill="#ffffff"/>
@@ -46,7 +52,7 @@ async function handleLogin() {
         </div>
       </div>
 
-      <div class="space-y-10">
+      <div class="relative z-10 space-y-10">
         <div class="space-y-4">
           <h1 class="text-4xl font-bold leading-tight">智信 MaaS 应用运营管理平台</h1>
           <p class="text-lg text-white/70 max-w-md leading-relaxed">
@@ -97,7 +103,7 @@ async function handleLogin() {
         </div>
       </div>
 
-      <div class="text-sm text-white/40">
+      <div class="relative z-10 text-sm text-white/40">
         © 2026 中信国际电讯 版权所有
       </div>
     </div>
@@ -166,4 +172,34 @@ async function handleLogin() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.tech-lines {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.tech-scan {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.03) 70%,
+    transparent 100%
+  );
+  animation: techScan 3s linear infinite;
+}
+
+@keyframes techScan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+</style>
 <!-- [AI_END LINES=154 TIMESTAMP=2025-06-20 06:00:00] -->
