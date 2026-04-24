@@ -1,39 +1,40 @@
 <!-- [AI_START TIMESTAMP=2025-06-20 06:00:00] -->
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import Button from '@/components/ui/Button.vue'
-import Input from '@/components/ui/Input.vue'
-import Label from '@/components/ui/Label.vue'
-import Switch from '@/components/ui/Switch.vue'
-import Card from '@/components/ui/Card.vue'
-import CardHeader from '@/components/ui/CardHeader.vue'
-import CardTitle from '@/components/ui/CardTitle.vue'
-import CardContent from '@/components/ui/CardContent.vue'
-import CardDescription from '@/components/ui/CardDescription.vue'
-import { Eye, EyeOff, BarChart3, ShieldCheck, Settings, FileText, Loader2 } from 'lucide-vue-next'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import {
+  Eye,
+  EyeOff,
+  BarChart3,
+  ShieldCheck,
+  Settings,
+  FileText,
+  Loader2,
+} from "lucide-vue-next";
 
-const router = useRouter()
-const auth = useAuthStore()
+const router = useRouter();
+const auth = useAuthStore();
 
-const username = ref('')
-const password = ref('')
-const showPassword = ref(false)
-const rememberMe = ref(false)
-const isLoggingIn = ref(false)
+const username = ref("");
+const password = ref("");
+const showPassword = ref(false);
+const rememberMe = ref(false);
+const isLoggingIn = ref(false);
 
 async function handleLogin() {
-  isLoggingIn.value = true
-  await auth.demoLogin()
-  router.push('/dashboard')
+  isLoggingIn.value = true;
+  await auth.demoLogin();
+  router.push("/dashboard");
 }
 </script>
 
 <template>
   <div class="flex min-h-screen w-full">
     <!-- Left Panel: Black background, platform introduction -->
-    <div class="relative hidden lg:flex lg:w-1/2 flex-col justify-between overflow-hidden bg-black text-white p-12">
+    <div
+      class="relative hidden lg:flex lg:w-1/2 flex-col justify-between overflow-hidden bg-black text-white p-12"
+    >
       <!-- Tech background -->
       <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div class="tech-lines absolute inset-0"></div>
@@ -42,11 +43,31 @@ async function handleLogin() {
 
       <div class="relative z-10">
         <div class="flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-8 w-8 rounded-lg">
-            <rect width="32" height="32" rx="8" fill="#ffffff"/>
-            <path d="M16 7L7 12.5l9 5.5 9-5.5z" fill="#000000" opacity="0.95"/>
-            <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.55" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.3" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 32 32"
+            class="h-8 w-8 rounded-lg"
+          >
+            <rect width="32" height="32" rx="8" fill="#ffffff" />
+            <path d="M16 7L7 12.5l9 5.5 9-5.5z" fill="#000000" opacity="0.95" />
+            <path
+              d="M7 16.5l9 5.5 9-5.5"
+              fill="none"
+              stroke="#000000"
+              stroke-width="1.8"
+              opacity="0.55"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M7 20l9 5.5 9-5.5"
+              fill="none"
+              stroke="#000000"
+              stroke-width="1.8"
+              opacity="0.3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
           <span class="text-xl font-semibold">应用运营管理平台</span>
         </div>
@@ -54,7 +75,9 @@ async function handleLogin() {
 
       <div class="relative z-10 space-y-10">
         <div class="space-y-4">
-          <h1 class="text-4xl font-bold leading-tight">智信 MaaS 应用运营管理平台</h1>
+          <h1 class="text-4xl font-bold leading-tight">
+            智信 MaaS 应用运营管理平台
+          </h1>
           <p class="text-lg text-white/70 max-w-md leading-relaxed">
             一站式企业应用运营管理解决方案，以安全为基，以高效为纲，赋能企业数字化升级。
           </p>
@@ -62,42 +85,58 @@ async function handleLogin() {
 
         <div class="space-y-6">
           <div class="flex items-start gap-4">
-            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0"
+            >
               <BarChart3 class="h-5 w-5 text-white" />
             </div>
             <div>
               <p class="text-base font-medium">数据可视化分析</p>
-              <p class="text-sm text-white/60 mt-1">多维度运营数据统计，实时监控业务指标</p>
+              <p class="text-sm text-white/60 mt-1">
+                多维度运营数据统计，实时监控业务指标
+              </p>
             </div>
           </div>
 
           <div class="flex items-start gap-4">
-            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0"
+            >
               <ShieldCheck class="h-5 w-5 text-white" />
             </div>
             <div>
               <p class="text-base font-medium">安全合规审计</p>
-              <p class="text-sm text-white/60 mt-1">全流程操作日志记录，满足企业合规审查要求</p>
+              <p class="text-sm text-white/60 mt-1">
+                全流程操作日志记录，满足企业合规审查要求
+              </p>
             </div>
           </div>
 
           <div class="flex items-start gap-4">
-            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0"
+            >
               <Settings class="h-5 w-5 text-white" />
             </div>
             <div>
               <p class="text-base font-medium">全生命周期管理</p>
-              <p class="text-sm text-white/60 mt-1">从订购到运维，覆盖应用运营全流程需求</p>
+              <p class="text-sm text-white/60 mt-1">
+                从订购到运维，覆盖应用运营全流程需求
+              </p>
             </div>
           </div>
 
           <div class="flex items-start gap-4">
-            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0"
+            >
               <FileText class="h-5 w-5 text-white" />
             </div>
             <div>
               <p class="text-base font-medium">账单与报表</p>
-              <p class="text-sm text-white/60 mt-1">透明账单明细，支持按月导出报表，开票便捷</p>
+              <p class="text-sm text-white/60 mt-1">
+                透明账单明细，支持按月导出报表，开票便捷
+              </p>
             </div>
           </div>
         </div>
@@ -109,11 +148,15 @@ async function handleLogin() {
     </div>
 
     <!-- Right Panel: White background, login form -->
-    <div class="flex w-full lg:w-1/2 items-center justify-center bg-white p-6 sm:p-12">
+    <div
+      class="flex w-full lg:w-1/2 items-center justify-center bg-white p-6 sm:p-12"
+    >
       <div class="w-full max-w-sm">
         <div class="mb-8">
           <h2 class="text-2xl font-bold text-foreground">欢迎回来</h2>
-          <p class="text-sm text-muted-foreground mt-2">请登录您的账号以继续使用平台服务</p>
+          <p class="text-sm text-muted-foreground mt-2">
+            请登录您的账号以继续使用平台服务
+          </p>
         </div>
 
         <Card>
@@ -163,7 +206,7 @@ async function handleLogin() {
 
               <Button type="submit" class="w-full" :disabled="isLoggingIn">
                 <Loader2 v-if="isLoggingIn" class="h-4 w-4 animate-spin" />
-                {{ isLoggingIn ? '登录中...' : '登录' }}
+                {{ isLoggingIn ? "登录中..." : "登录" }}
               </Button>
             </form>
           </CardContent>

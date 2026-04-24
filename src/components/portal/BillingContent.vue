@@ -1,74 +1,161 @@
 <!-- [AI_START TIMESTAMP=2025-06-20 06:45:00] -->
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import Card from '@/components/ui/Card.vue'
-import CardHeader from '@/components/ui/CardHeader.vue'
-import CardTitle from '@/components/ui/CardTitle.vue'
-import CardDescription from '@/components/ui/CardDescription.vue'
-import CardContent from '@/components/ui/CardContent.vue'
-import Button from '@/components/ui/Button.vue'
-import Badge from '@/components/ui/Badge.vue'
-import Input from '@/components/ui/Input.vue'
-import Table from '@/components/ui/Table.vue'
-import TableHeader from '@/components/ui/TableHeader.vue'
-import TableBody from '@/components/ui/TableBody.vue'
-import TableRow from '@/components/ui/TableRow.vue'
-import TableHead from '@/components/ui/TableHead.vue'
-import TableCell from '@/components/ui/TableCell.vue'
-import Dialog from '@/components/ui/Dialog.vue'
-import DialogContent from '@/components/ui/DialogContent.vue'
-import DialogHeader from '@/components/ui/DialogHeader.vue'
-import DialogTitle from '@/components/ui/DialogTitle.vue'
-import DialogDescription from '@/components/ui/DialogDescription.vue'
-import DialogFooter from '@/components/ui/DialogFooter.vue'
+import { ref, computed } from "vue";
 import {
-  Search, CheckCircle2, Clock, FileText, TrendingUp,
-  AlertCircle, Eye, Download,
-} from 'lucide-vue-next'
+  Search,
+  CheckCircle2,
+  Clock,
+  FileText,
+  TrendingUp,
+  AlertCircle,
+  Eye,
+  Download,
+} from "lucide-vue-next";
 
 const bills = [
-  { id: 'BILL202403', company: '华为云科技', month: '2024年3月', amount: 12997, status: 'unpaid', dueDate: '2024-04-15' },
-  { id: 'BILL202402', company: '阿里云数', month: '2024年2月', amount: 6998, status: 'paid', paidAt: '2024-03-10' },
-  { id: 'BILL202401', company: '腾讯云智', month: '2024年1月', amount: 5999, status: 'paid', paidAt: '2024-02-08' },
-  { id: 'BILL202403002', company: '百度智能', month: '2024年3月', amount: 3200, status: 'unpaid', dueDate: '2024-04-15' },
-  { id: 'BILL202402002', company: '字节跳动', month: '2024年2月', amount: 25998, status: 'paid', paidAt: '2024-03-05' },
-]
+  {
+    id: "BILL202403",
+    company: "华为云科技",
+    month: "2024年3月",
+    amount: 12997,
+    status: "unpaid",
+    dueDate: "2024-04-15",
+  },
+  {
+    id: "BILL202402",
+    company: "阿里云数",
+    month: "2024年2月",
+    amount: 6998,
+    status: "paid",
+    paidAt: "2024-03-10",
+  },
+  {
+    id: "BILL202401",
+    company: "腾讯云智",
+    month: "2024年1月",
+    amount: 5999,
+    status: "paid",
+    paidAt: "2024-02-08",
+  },
+  {
+    id: "BILL202403002",
+    company: "百度智能",
+    month: "2024年3月",
+    amount: 3200,
+    status: "unpaid",
+    dueDate: "2024-04-15",
+  },
+  {
+    id: "BILL202402002",
+    company: "字节跳动",
+    month: "2024年2月",
+    amount: 25998,
+    status: "paid",
+    paidAt: "2024-03-05",
+  },
+];
 
 const invoices = [
-  { id: 'INV202403001', company: '华为云科技', billId: 'BILL202402', type: '增值税专用发票', amount: 6998, status: 'issued', issuedAt: '2024-03-15' },
-  { id: 'INV202403002', company: '阿里云数', billId: 'BILL202401', type: '增值税普通发票', amount: 5999, status: 'pending', issuedAt: '-' },
-  { id: 'INV202402001', company: '字节跳动', billId: 'BILL202402', type: '增值税专用发票', amount: 25998, status: 'issued', issuedAt: '2024-03-10' },
-]
+  {
+    id: "INV202403001",
+    company: "华为云科技",
+    billId: "BILL202402",
+    type: "增值税专用发票",
+    amount: 6998,
+    status: "issued",
+    issuedAt: "2024-03-15",
+  },
+  {
+    id: "INV202403002",
+    company: "阿里云数",
+    billId: "BILL202401",
+    type: "增值税普通发票",
+    amount: 5999,
+    status: "pending",
+    issuedAt: "-",
+  },
+  {
+    id: "INV202402001",
+    company: "字节跳动",
+    billId: "BILL202402",
+    type: "增值税专用发票",
+    amount: 25998,
+    status: "issued",
+    issuedAt: "2024-03-10",
+  },
+];
 
-const statusConfig: Record<string, { label: string; variant: 'default' | 'outline' | 'secondary' | 'destructive'; icon: typeof CheckCircle2; color: string }> = {
-  paid: { label: '已支付', variant: 'outline', icon: CheckCircle2, color: 'text-green-500' },
-  unpaid: { label: '待支付', variant: 'outline', icon: Clock, color: 'text-yellow-500' },
-}
+const statusConfig: Record<
+  string,
+  {
+    label: string;
+    variant: "default" | "outline" | "secondary" | "destructive";
+    icon: typeof CheckCircle2;
+    color: string;
+  }
+> = {
+  paid: {
+    label: "已支付",
+    variant: "outline",
+    icon: CheckCircle2,
+    color: "text-green-500",
+  },
+  unpaid: {
+    label: "待支付",
+    variant: "outline",
+    icon: Clock,
+    color: "text-yellow-500",
+  },
+};
 
-const invoiceStatusConfig: Record<string, { label: string; variant: 'default' | 'outline' | 'secondary' | 'destructive'; icon: typeof CheckCircle2; color: string }> = {
-  issued: { label: '已开具', variant: 'outline', icon: CheckCircle2, color: 'text-green-500' },
-  pending: { label: '待开具', variant: 'outline', icon: Clock, color: 'text-yellow-500' },
-}
+const invoiceStatusConfig: Record<
+  string,
+  {
+    label: string;
+    variant: "default" | "outline" | "secondary" | "destructive";
+    icon: typeof CheckCircle2;
+    color: string;
+  }
+> = {
+  issued: {
+    label: "已开具",
+    variant: "outline",
+    icon: CheckCircle2,
+    color: "text-green-500",
+  },
+  pending: {
+    label: "待开具",
+    variant: "outline",
+    icon: Clock,
+    color: "text-yellow-500",
+  },
+};
 
-const searchQuery = ref('')
-const billDetailOpen = ref(false)
-const selectedBill = ref<typeof bills[0] | null>(null)
+const searchQuery = ref("");
+const billDetailOpen = ref(false);
+const selectedBill = ref<(typeof bills)[0] | null>(null);
 
 const filteredBills = computed(() =>
   bills.filter(
     (b) =>
       b.id.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      b.company.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-)
+      b.company.toLowerCase().includes(searchQuery.value.toLowerCase()),
+  ),
+);
 
-function handleViewBill(bill: typeof bills[0]) {
-  selectedBill.value = bill
-  billDetailOpen.value = true
+function handleViewBill(bill: (typeof bills)[0]) {
+  selectedBill.value = bill;
+  billDetailOpen.value = true;
 }
 
-const totalUnpaid = computed(() => bills.filter((b) => b.status === 'unpaid').reduce((acc, b) => acc + b.amount, 0))
-const pendingInvoices = computed(() => invoices.filter((i) => i.status === 'pending').length)
+const totalUnpaid = computed(() =>
+  bills
+    .filter((b) => b.status === "unpaid")
+    .reduce((acc, b) => acc + b.amount, 0),
+);
+const pendingInvoices = computed(
+  () => invoices.filter((i) => i.status === "pending").length,
+);
 </script>
 
 <template>
@@ -80,20 +167,55 @@ const pendingInvoices = computed(() => invoices.filter((i) => i.status === 'pend
 
     <div class="grid gap-4 md:grid-cols-4">
       <Card>
-        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">本月账单</CardTitle></CardHeader>
-        <CardContent><div class="text-2xl font-bold">{{ bills.length }}</div></CardContent>
+        <CardHeader class="pb-2"
+          ><CardTitle class="text-sm font-medium text-muted-foreground"
+            >本月账单</CardTitle
+          ></CardHeader
+        >
+        <CardContent
+          ><div class="text-2xl font-bold">{{ bills.length }}</div></CardContent
+        >
       </Card>
       <Card>
-        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">待支付金额</CardTitle></CardHeader>
-        <CardContent><div class="text-2xl font-bold text-destructive">¥{{ totalUnpaid.toLocaleString() }}</div></CardContent>
+        <CardHeader class="pb-2"
+          ><CardTitle class="text-sm font-medium text-muted-foreground"
+            >待支付金额</CardTitle
+          ></CardHeader
+        >
+        <CardContent
+          ><div class="text-2xl font-bold text-destructive">
+            ¥{{ totalUnpaid.toLocaleString() }}
+          </div></CardContent
+        >
       </Card>
       <Card>
-        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">已收款</CardTitle></CardHeader>
-        <CardContent><div class="text-2xl font-bold text-green-600">¥{{ bills.filter((b) => b.status === 'paid').reduce((acc, b) => acc + b.amount, 0).toLocaleString() }}</div></CardContent>
+        <CardHeader class="pb-2"
+          ><CardTitle class="text-sm font-medium text-muted-foreground"
+            >已收款</CardTitle
+          ></CardHeader
+        >
+        <CardContent
+          ><div class="text-2xl font-bold text-green-600">
+            ¥{{
+              bills
+                .filter((b) => b.status === "paid")
+                .reduce((acc, b) => acc + b.amount, 0)
+                .toLocaleString()
+            }}
+          </div></CardContent
+        >
       </Card>
       <Card>
-        <CardHeader class="pb-2"><CardTitle class="text-sm font-medium text-muted-foreground">待开发票</CardTitle></CardHeader>
-        <CardContent><div class="text-2xl font-bold text-yellow-600">{{ pendingInvoices }} 笔</div></CardContent>
+        <CardHeader class="pb-2"
+          ><CardTitle class="text-sm font-medium text-muted-foreground"
+            >待开发票</CardTitle
+          ></CardHeader
+        >
+        <CardContent
+          ><div class="text-2xl font-bold text-yellow-600">
+            {{ pendingInvoices }} 笔
+          </div></CardContent
+        >
       </Card>
     </div>
 
@@ -102,8 +224,14 @@ const pendingInvoices = computed(() => invoices.filter((i) => i.status === 'pend
         <div class="flex items-center justify-between">
           <CardTitle>账单列表</CardTitle>
           <div class="relative">
-            <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input v-model="searchQuery" placeholder="搜索账单号或企业..." class="w-64 pl-8" />
+            <Search
+              class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
+            />
+            <Input
+              v-model="searchQuery"
+              placeholder="搜索账单号或企业..."
+              class="w-64 pl-8"
+            />
           </div>
         </div>
       </CardHeader>
@@ -125,18 +253,35 @@ const pendingInvoices = computed(() => invoices.filter((i) => i.status === 'pend
               <TableCell class="font-mono text-sm">{{ bill.id }}</TableCell>
               <TableCell class="font-medium">{{ bill.company }}</TableCell>
               <TableCell>{{ bill.month }}</TableCell>
-              <TableCell class="font-medium">¥{{ bill.amount.toLocaleString() }}</TableCell>
+              <TableCell class="font-medium"
+                >¥{{ bill.amount.toLocaleString() }}</TableCell
+              >
               <TableCell>
-                <Badge :variant="statusConfig[bill.status].variant" class="gap-1">
-                  <component :is="statusConfig[bill.status].icon" :class="['h-3 w-3', statusConfig[bill.status].color]" />
+                <Badge
+                  :variant="statusConfig[bill.status].variant"
+                  class="gap-1"
+                >
+                  <component
+                    :is="statusConfig[bill.status].icon"
+                    :class="['h-3 w-3', statusConfig[bill.status].color]"
+                  />
                   {{ statusConfig[bill.status].label }}
                 </Badge>
               </TableCell>
-              <TableCell class="text-muted-foreground">{{ bill.dueDate }}</TableCell>
+              <TableCell class="text-muted-foreground">{{
+                bill.dueDate
+              }}</TableCell>
               <TableCell class="text-right">
                 <div class="flex justify-end gap-2">
-                  <Button variant="ghost" size="sm" @click="handleViewBill(bill)"><Eye class="mr-1 h-3 w-3" />详情</Button>
-                  <Button variant="ghost" size="sm"><Download class="mr-1 h-3 w-3" />导出</Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    @click="handleViewBill(bill)"
+                    ><Eye class="mr-1 h-3 w-3" />详情</Button
+                  >
+                  <Button variant="ghost" size="sm"
+                    ><Download class="mr-1 h-3 w-3" />导出</Button
+                  >
                 </div>
               </TableCell>
             </TableRow>
@@ -172,16 +317,28 @@ const pendingInvoices = computed(() => invoices.filter((i) => i.status === 'pend
               <TableCell class="font-mono text-sm">{{ inv.id }}</TableCell>
               <TableCell class="font-medium">{{ inv.company }}</TableCell>
               <TableCell>{{ inv.type }}</TableCell>
-              <TableCell class="font-medium">¥{{ inv.amount.toLocaleString() }}</TableCell>
+              <TableCell class="font-medium"
+                >¥{{ inv.amount.toLocaleString() }}</TableCell
+              >
               <TableCell>
-                <Badge :variant="invoiceStatusConfig[inv.status].variant" class="gap-1">
-                  <component :is="invoiceStatusConfig[inv.status].icon" :class="['h-3 w-3', invoiceStatusConfig[inv.status].color]" />
+                <Badge
+                  :variant="invoiceStatusConfig[inv.status].variant"
+                  class="gap-1"
+                >
+                  <component
+                    :is="invoiceStatusConfig[inv.status].icon"
+                    :class="['h-3 w-3', invoiceStatusConfig[inv.status].color]"
+                  />
                   {{ invoiceStatusConfig[inv.status].label }}
                 </Badge>
               </TableCell>
-              <TableCell class="text-muted-foreground">{{ inv.issuedAt }}</TableCell>
+              <TableCell class="text-muted-foreground">{{
+                inv.issuedAt
+              }}</TableCell>
               <TableCell class="text-right">
-                <Button v-if="inv.status === 'pending'" size="sm">开具发票</Button>
+                <Button v-if="inv.status === 'pending'" size="sm"
+                  >开具发票</Button
+                >
                 <Button v-else variant="ghost" size="sm">查看</Button>
               </TableCell>
             </TableRow>
@@ -194,23 +351,57 @@ const pendingInvoices = computed(() => invoices.filter((i) => i.status === 'pend
       <DialogContent>
         <DialogHeader>
           <DialogTitle>账单详情</DialogTitle>
-          <DialogDescription>{{ selectedBill?.company }} - {{ selectedBill?.month }} 账单</DialogDescription>
+          <DialogDescription
+            >{{ selectedBill?.company }} -
+            {{ selectedBill?.month }} 账单</DialogDescription
+          >
         </DialogHeader>
         <div v-if="selectedBill" class="space-y-3">
-          <div class="flex justify-between"><span class="text-muted-foreground">账单编号</span><span class="font-mono">{{ selectedBill.id }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">企业名称</span><span class="font-medium">{{ selectedBill.company }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">账单月份</span><span>{{ selectedBill.month }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">应付金额</span><span class="font-medium">¥{{ selectedBill.amount.toLocaleString() }}</span></div>
-          <div class="flex justify-between"><span class="text-muted-foreground">支付状态</span>
-            <Badge :variant="statusConfig[selectedBill.status].variant" class="gap-1">
-              <component :is="statusConfig[selectedBill.status].icon" :class="['h-3 w-3', statusConfig[selectedBill.status].color]" />
+          <div class="flex justify-between">
+            <span class="text-muted-foreground">账单编号</span
+            ><span class="font-mono">{{ selectedBill.id }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted-foreground">企业名称</span
+            ><span class="font-medium">{{ selectedBill.company }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted-foreground">账单月份</span
+            ><span>{{ selectedBill.month }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted-foreground">应付金额</span
+            ><span class="font-medium"
+              >¥{{ selectedBill.amount.toLocaleString() }}</span
+            >
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted-foreground">支付状态</span>
+            <Badge
+              :variant="statusConfig[selectedBill.status].variant"
+              class="gap-1"
+            >
+              <component
+                :is="statusConfig[selectedBill.status].icon"
+                :class="['h-3 w-3', statusConfig[selectedBill.status].color]"
+              />
               {{ statusConfig[selectedBill.status].label }}
             </Badge>
           </div>
-          <div class="flex justify-between"><span class="text-muted-foreground">到期日</span><span>{{ selectedBill.dueDate }}</span></div>
-          <div v-if="selectedBill.paidAt" class="flex justify-between"><span class="text-muted-foreground">支付时间</span><span>{{ selectedBill.paidAt }}</span></div>
+          <div class="flex justify-between">
+            <span class="text-muted-foreground">到期日</span
+            ><span>{{ selectedBill.dueDate }}</span>
+          </div>
+          <div v-if="selectedBill.paidAt" class="flex justify-between">
+            <span class="text-muted-foreground">支付时间</span
+            ><span>{{ selectedBill.paidAt }}</span>
+          </div>
         </div>
-        <DialogFooter><Button variant="outline" @click="billDetailOpen = false">关闭</Button></DialogFooter>
+        <DialogFooter
+          ><Button variant="outline" @click="billDetailOpen = false"
+            >关闭</Button
+          ></DialogFooter
+        >
       </DialogContent>
     </Dialog>
   </div>
