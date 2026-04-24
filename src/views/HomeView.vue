@@ -12,7 +12,7 @@ import CardHeader from '@/components/ui/CardHeader.vue'
 import CardTitle from '@/components/ui/CardTitle.vue'
 import CardContent from '@/components/ui/CardContent.vue'
 import CardDescription from '@/components/ui/CardDescription.vue'
-import { Eye, EyeOff, BarChart3, ShieldCheck, Settings, FileText } from 'lucide-vue-next'
+import { Eye, EyeOff, BarChart3, ShieldCheck, Settings, FileText, Loader2 } from 'lucide-vue-next'
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -21,15 +21,11 @@ const username = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const rememberMe = ref(false)
+const isLoggingIn = ref(false)
 
-function handleLogin() {
-  // UI demo only: skip validation and directly enter
-  auth.user = {
-    name: '管理员',
-    company: '应用运营管理平台',
-    role: '管理员',
-    email: 'admin@example.com',
-  }
+async function handleLogin() {
+  isLoggingIn.value = true
+  await auth.demoLogin()
   router.push('/dashboard')
 }
 </script>
@@ -159,8 +155,9 @@ function handleLogin() {
                 </div>
               </div>
 
-              <Button type="submit" class="w-full">
-                登录
+              <Button type="submit" class="w-full" :disabled="isLoggingIn">
+                <Loader2 v-if="isLoggingIn" class="h-4 w-4 animate-spin" />
+                {{ isLoggingIn ? '登录中...' : '登录' }}
               </Button>
             </form>
           </CardContent>

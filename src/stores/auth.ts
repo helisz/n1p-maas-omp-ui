@@ -102,6 +102,21 @@ export const useAuthStore = defineStore('auth', () => {
     justLoggedIn.value = false
   }
 
+  async function demoLogin(): Promise<void> {
+    await new Promise((r) => setTimeout(r, 1000))
+
+    const demoUser: User = {
+      name: '管理员',
+      company: '应用运营管理平台',
+      role: '管理员',
+      email: 'admin@example.com',
+    }
+
+    user.value = demoUser
+    justLoggedIn.value = true
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(demoUser))
+  }
+
   return {
     user,
     isLoading,
@@ -112,6 +127,7 @@ export const useAuthStore = defineStore('auth', () => {
     register,
     logout,
     clearJustLoggedIn,
+    demoLogin,
   }
 })
 // [AI_END LINES=89 TIMESTAMP=2025-06-15 12:00:00]
