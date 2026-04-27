@@ -155,7 +155,7 @@ const stats = computed(() => ({
           </div></CardContent
         >
       </Card>
-      <Card>
+      <!-- <Card>
         <CardHeader class="pb-2"
           ><CardTitle class="text-sm font-medium text-muted-foreground"
             >冻结金额</CardTitle
@@ -166,7 +166,7 @@ const stats = computed(() => ({
             ¥{{ formatCredit(stats.totalFrozen) }}
           </div></CardContent
         >
-      </Card>
+      </Card> -->
       <Card>
         <CardHeader class="pb-2"
           ><CardTitle class="text-sm font-medium text-muted-foreground"
