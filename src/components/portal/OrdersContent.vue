@@ -2,17 +2,17 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import {
-  Search,
-  Filter,
-  MoreHorizontal,
-  Eye,
-  CreditCard,
-  X,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  RotateCcw,
-} from "lucide-vue-next";
+  MagnifyingGlassIcon,
+  FunnelIcon,
+  EllipsisHorizontalIcon,
+  EyeIcon,
+  CreditCardIcon,
+  XMarkIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  XCircleIcon,
+  ArrowPathIcon,
+} from "@heroicons/vue/24/outline";
 
 const orders = [
   {
@@ -85,32 +85,32 @@ const statusConfig: Record<
   {
     label: string;
     variant: "default" | "outline" | "secondary" | "destructive";
-    icon: typeof Clock;
+    icon: typeof ClockIcon;
     color: string;
   }
 > = {
   pending: {
     label: "待支付",
     variant: "outline",
-    icon: Clock,
+    icon: ClockIcon,
     color: "text-yellow-500",
   },
   paid: {
     label: "已支付",
     variant: "outline",
-    icon: CheckCircle2,
+    icon: CheckCircleIcon,
     color: "text-green-500",
   },
   cancelled: {
     label: "已取消",
     variant: "secondary",
-    icon: XCircle,
+    icon: XCircleIcon,
     color: "text-muted-foreground",
   },
   refunding: {
     label: "退款中",
     variant: "outline",
-    icon: RotateCcw,
+    icon: ArrowPathIcon,
     color: "text-blue-500",
   },
 };
@@ -218,7 +218,7 @@ const stats = computed(() => ({
           <CardTitle>订单列表</CardTitle>
           <div class="flex items-center gap-2">
             <div class="relative">
-              <Search
+              <MagnifyingGlassIcon
                 class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
               />
               <Input
@@ -228,7 +228,7 @@ const stats = computed(() => ({
               />
             </div>
             <Button variant="outline" size="icon"
-              ><Filter class="h-4 w-4"
+              ><FunnelIcon class="h-4 w-4"
             /></Button>
           </div>
         </div>
@@ -273,24 +273,24 @@ const stats = computed(() => ({
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <Button variant="ghost" size="icon"
-                      ><MoreHorizontal class="h-4 w-4"
+                      ><EllipsisHorizontalIcon class="h-4 w-4"
                     /></Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem @click="handleViewDetail(order)">
-                      <Eye class="mr-2 h-4 w-4" />查看详情
+                      <EyeIcon class="mr-2 h-4 w-4" />查看详情
                     </DropdownMenuItem>
                     <DropdownMenuItem v-if="order.status === 'pending'">
-                      <CreditCard class="mr-2 h-4 w-4" />标记为已支付
+                      <CreditCardIcon class="mr-2 h-4 w-4" />标记为已支付
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       v-if="order.status === 'pending'"
                       class="text-destructive"
                     >
-                      <X class="mr-2 h-4 w-4" />取消订单
+                      <XMarkIcon class="mr-2 h-4 w-4" />取消订单
                     </DropdownMenuItem>
                     <DropdownMenuItem v-if="order.status === 'paid'">
-                      <RotateCcw class="mr-2 h-4 w-4" />发起退款
+                      <ArrowPathIcon class="mr-2 h-4 w-4" />发起退款
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

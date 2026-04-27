@@ -4,14 +4,14 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import {
-  Eye,
-  EyeOff,
-  BarChart3,
-  ShieldCheck,
-  Settings,
-  FileText,
-  Loader2,
-} from "lucide-vue-next";
+  EyeIcon,
+  EyeSlashIcon,
+  ChartBarIcon,
+  ShieldCheckIcon,
+  Cog6ToothIcon,
+  DocumentTextIcon,
+  ArrowPathIcon,
+} from "@heroicons/vue/24/outline";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -88,7 +88,7 @@ async function handleLogin() {
             <div
               class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0"
             >
-              <BarChart3 class="h-5 w-5 text-white" />
+              <ChartBarIcon class="h-5 w-5 text-white" />
             </div>
             <div>
               <p class="text-base font-medium">数据可视化分析</p>
@@ -102,7 +102,7 @@ async function handleLogin() {
             <div
               class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0"
             >
-              <ShieldCheck class="h-5 w-5 text-white" />
+              <ShieldCheckIcon class="h-5 w-5 text-white" />
             </div>
             <div>
               <p class="text-base font-medium">安全合规审计</p>
@@ -116,7 +116,7 @@ async function handleLogin() {
             <div
               class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0"
             >
-              <Settings class="h-5 w-5 text-white" />
+              <Cog6ToothIcon class="h-5 w-5 text-white" />
             </div>
             <div>
               <p class="text-base font-medium">全生命周期管理</p>
@@ -130,7 +130,7 @@ async function handleLogin() {
             <div
               class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 shrink-0"
             >
-              <FileText class="h-5 w-5 text-white" />
+              <DocumentTextIcon class="h-5 w-5 text-white" />
             </div>
             <div>
               <p class="text-base font-medium">账单与报表</p>
@@ -191,8 +191,8 @@ async function handleLogin() {
                     @click="showPassword = !showPassword"
                     class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
-                    <EyeOff v-if="showPassword" class="h-4 w-4" />
-                    <Eye v-else class="h-4 w-4" />
+                    <EyeSlashIcon v-if="showPassword" class="h-4 w-4" />
+                    <EyeIcon v-else class="h-4 w-4" />
                   </button>
                 </div>
               </div>
@@ -205,7 +205,7 @@ async function handleLogin() {
               </div>
 
               <Button type="submit" class="w-full" :disabled="isLoggingIn">
-                <Loader2 v-if="isLoggingIn" class="h-4 w-4 animate-spin" />
+                <ArrowPathIcon v-if="isLoggingIn" class="h-4 w-4 animate-spin" />
                 {{ isLoggingIn ? "登录中..." : "登录" }}
               </Button>
             </form>

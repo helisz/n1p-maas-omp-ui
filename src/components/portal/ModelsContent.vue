@@ -2,18 +2,18 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import {
-  Search,
-  Brain,
-  CheckCircle2,
-  AlertTriangle,
-  XCircle,
-  Eye,
-  Edit,
-  Power,
-  Plus,
-  ChevronRight,
-  ChevronLeft,
-} from "lucide-vue-next";
+  MagnifyingGlassIcon,
+  SparklesIcon,
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  XCircleIcon,
+  EyeIcon,
+  PencilSquareIcon,
+  BoltIcon,
+  PlusIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+} from "@heroicons/vue/24/outline";
 
 interface ModelItem {
   id: string;
@@ -108,26 +108,26 @@ const statusConfig: Record<
   {
     label: string;
     variant: "default" | "outline" | "secondary" | "destructive";
-    icon: typeof CheckCircle2;
+    icon: typeof CheckCircleIcon;
     class: string;
   }
 > = {
   online: {
     label: "正常",
     variant: "outline",
-    icon: CheckCircle2,
+    icon: CheckCircleIcon,
     class: "text-green-500",
   },
   maintenance: {
     label: "维护中",
     variant: "outline",
-    icon: AlertTriangle,
+    icon: ExclamationTriangleIcon,
     class: "text-yellow-500",
   },
   offline: {
     label: "已下线",
     variant: "secondary",
-    icon: XCircle,
+    icon: XCircleIcon,
     class: "text-muted-foreground",
   },
 };
@@ -280,7 +280,7 @@ function handleCreateModel() {
           <CardTitle>模型列表</CardTitle>
           <div class="flex items-center gap-3">
             <div class="relative">
-              <Search
+              <MagnifyingGlassIcon
                 class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
               />
               <Input
@@ -290,7 +290,7 @@ function handleCreateModel() {
               />
             </div>
             <Button @click="openCreateDialog"
-              ><Plus class="mr-1 h-4 w-4" />接入模型</Button
+              ><PlusIcon class="mr-1 h-4 w-4" />接入模型</Button
             >
           </div>
         </div>
@@ -337,13 +337,13 @@ function handleCreateModel() {
                     variant="ghost"
                     size="sm"
                     @click="handleViewDetail(model)"
-                    ><Eye class="mr-1 h-3 w-3" />详情</Button
+                    ><EyeIcon class="mr-1 h-3 w-3" />详情</Button
                   >
                   <Button variant="ghost" size="sm"
-                    ><Edit class="mr-1 h-3 w-3" />编辑</Button
+                    ><PencilSquareIcon class="mr-1 h-3 w-3" />编辑</Button
                   >
                   <Button variant="ghost" size="sm"
-                    ><Power class="mr-1 h-3 w-3" />{{
+                    ><BoltIcon class="mr-1 h-3 w-3" />{{
                       model.status === "online" ? "停用" : "启用"
                     }}</Button
                   >
@@ -444,7 +444,7 @@ function handleCreateModel() {
             </div>
             <div class="flex justify-end">
               <Button variant="outline" @click="createTab = 'pricing'"
-                >下一步 <ChevronRight class="ml-1 h-4 w-4"
+                >下一步 <ChevronRightIcon class="ml-1 h-4 w-4"
               /></Button>
             </div>
           </TabsContent>
@@ -495,7 +495,7 @@ function handleCreateModel() {
             </div>
             <div class="flex justify-between">
               <Button variant="outline" @click="createTab = 'basic'"
-                ><ChevronLeft class="mr-1 h-4 w-4" />上一步</Button
+                ><ChevronLeftIcon class="mr-1 h-4 w-4" />上一步</Button
               >
               <Button @click="handleCreateModel">确认接入</Button>
             </div>

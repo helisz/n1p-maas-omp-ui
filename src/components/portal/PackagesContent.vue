@@ -2,18 +2,18 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import {
-  Search,
-  Package,
-  CheckCircle2,
-  XCircle,
-  Eye,
-  Edit,
-  Power,
-  Plus,
-  ChevronRight,
-  ChevronLeft,
-  Layers,
-} from "lucide-vue-next";
+  MagnifyingGlassIcon,
+  CubeIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  EyeIcon,
+  PencilSquareIcon,
+  BoltIcon,
+  PlusIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+  Square3Stack3DIcon,
+} from "@heroicons/vue/24/outline";
 
 interface PackageItem {
   id: string;
@@ -89,20 +89,20 @@ const statusConfig: Record<
   {
     label: string;
     variant: "default" | "outline" | "secondary" | "destructive";
-    icon: typeof CheckCircle2;
+    icon: typeof CheckCircleIcon;
     class: string;
   }
 > = {
   online: {
     label: "已上线",
     variant: "outline",
-    icon: CheckCircle2,
+    icon: CheckCircleIcon,
     class: "text-green-500",
   },
   offline: {
     label: "已下线",
     variant: "secondary",
-    icon: XCircle,
+    icon: XCircleIcon,
     class: "text-muted-foreground",
   },
 };
@@ -263,7 +263,7 @@ function toggleModel(model: string) {
           <CardTitle>套餐列表</CardTitle>
           <div class="flex items-center gap-3">
             <div class="relative">
-              <Search
+              <MagnifyingGlassIcon
                 class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
               />
               <Input
@@ -273,7 +273,7 @@ function toggleModel(model: string) {
               />
             </div>
             <Button @click="openCreateDialog"
-              ><Plus class="mr-1 h-4 w-4" />创建套餐</Button
+              ><PlusIcon class="mr-1 h-4 w-4" />创建套餐</Button
             >
           </div>
         </div>
@@ -324,13 +324,13 @@ function toggleModel(model: string) {
                     variant="ghost"
                     size="sm"
                     @click="handleViewDetail(pkg)"
-                    ><Eye class="mr-1 h-3 w-3" />详情</Button
+                    ><EyeIcon class="mr-1 h-3 w-3" />详情</Button
                   >
                   <Button variant="ghost" size="sm"
-                    ><Edit class="mr-1 h-3 w-3" />编辑</Button
+                    ><PencilSquareIcon class="mr-1 h-3 w-3" />编辑</Button
                   >
                   <Button variant="ghost" size="sm"
-                    ><Power class="mr-1 h-3 w-3" />{{
+                    ><BoltIcon class="mr-1 h-3 w-3" />{{
                       pkg.status === "online" ? "下线" : "上线"
                     }}</Button
                   >
@@ -342,7 +342,7 @@ function toggleModel(model: string) {
       </CardContent>
     </Card>
 
-    <!-- Create Package Dialog -->
+    <!-- Create CubeIcon Dialog -->
     <Dialog v-model:open="createOpen">
       <DialogContent class="max-w-lg">
         <DialogHeader>
@@ -419,7 +419,7 @@ function toggleModel(model: string) {
             </div>
             <div class="flex justify-end">
               <Button variant="outline" @click="createTab = 'config'"
-                >下一步 <ChevronRight class="ml-1 h-4 w-4"
+                >下一步 <ChevronRightIcon class="ml-1 h-4 w-4"
               /></Button>
             </div>
           </TabsContent>
@@ -448,14 +448,14 @@ function toggleModel(model: string) {
                       : 'border-border hover:bg-accent',
                   ]"
                 >
-                  <Layers class="h-4 w-4" />
+                  <Square3Stack3DIcon class="h-4 w-4" />
                   {{ model }}
                 </button>
               </div>
             </div>
             <div class="flex justify-between">
               <Button variant="outline" @click="createTab = 'basic'"
-                ><ChevronLeft class="mr-1 h-4 w-4" />上一步</Button
+                ><ChevronLeftIcon class="mr-1 h-4 w-4" />上一步</Button
               >
               <Button @click="handleCreatePackage">创建套餐</Button>
             </div>

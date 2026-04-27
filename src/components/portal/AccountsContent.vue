@@ -2,18 +2,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
-  UserPlus,
-  MoreHorizontal,
-  Edit,
-  Trash2,
-  Shield,
-  CheckCircle2,
-  XCircle,
-  Crown,
-  UserCog,
-  Wallet,
-  Code,
-} from "lucide-vue-next";
+  UserPlusIcon,
+  EllipsisHorizontalIcon,
+  PencilSquareIcon,
+  TrashIcon,
+  ShieldCheckIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  StarIcon,
+  WrenchIcon,
+  WalletIcon,
+  CodeBracketIcon,
+} from "@heroicons/vue/24/outline";
 
 const accounts = [
   {
@@ -65,12 +65,12 @@ const accounts = [
 
 const roleConfig: Record<
   string,
-  { label: string; icon: typeof Crown; color: string }
+  { label: string; icon: typeof StarIcon; color: string }
 > = {
-  super_admin: { label: "超级管理员", icon: Crown, color: "text-amber-500" },
-  ops_admin: { label: "运营管理员", icon: UserCog, color: "text-blue-500" },
-  finance_admin: { label: "财务管理员", icon: Wallet, color: "text-green-500" },
-  api_user: { label: "API 调用员", icon: Code, color: "text-purple-500" },
+  super_admin: { label: "超级管理员", icon: StarIcon, color: "text-amber-500" },
+  ops_admin: { label: "运营管理员", icon: WrenchIcon, color: "text-blue-500" },
+  finance_admin: { label: "财务管理员", icon: WalletIcon, color: "text-green-500" },
+  api_user: { label: "API 调用员", icon: CodeBracketIcon, color: "text-purple-500" },
 };
 
 const roles = [
@@ -78,28 +78,28 @@ const roles = [
     id: "super_admin",
     name: "超级管理员",
     description: "拥有全部权限",
-    icon: Crown,
+    icon: StarIcon,
     color: "text-amber-500",
   },
   {
     id: "ops_admin",
     name: "运营管理员",
     description: "套餐、服务、密钥管理",
-    icon: UserCog,
+    icon: WrenchIcon,
     color: "text-blue-500",
   },
   {
     id: "finance_admin",
     name: "财务管理员",
     description: "订单、账单、发票",
-    icon: Wallet,
+    icon: WalletIcon,
     color: "text-green-500",
   },
   {
     id: "api_user",
     name: "API 调用员",
     description: "查看密钥和调用统计",
-    icon: Code,
+    icon: CodeBracketIcon,
     color: "text-purple-500",
   },
 ];
@@ -177,7 +177,7 @@ function handleEdit(account: (typeof accounts)[0]) {
               ><CardDescription>管理企业下所有子账号</CardDescription>
             </div>
             <Button @click="addDialogOpen = true"
-              ><UserPlus class="mr-2 h-4 w-4" />新增子账号</Button
+              ><UserPlusIcon class="mr-2 h-4 w-4" />新增子账号</Button
             >
           </div>
         </CardHeader>
@@ -217,33 +217,33 @@ function handleEdit(account: (typeof accounts)[0]) {
                     v-if="account.status === 'active'"
                     variant="outline"
                     class="gap-1"
-                    ><CheckCircle2
+                    ><CheckCircleIcon
                       class="h-3 w-3 text-green-500"
                     />已激活</Badge
                   >
                   <Badge v-else variant="secondary" class="gap-1"
-                    ><XCircle class="h-3 w-3" />已禁用</Badge
+                    ><XCircleIcon class="h-3 w-3" />已禁用</Badge
                   >
                 </TableCell>
                 <TableCell class="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       ><Button variant="ghost" size="icon"
-                        ><MoreHorizontal class="h-4 w-4" /></Button
+                        ><EllipsisHorizontalIcon class="h-4 w-4" /></Button
                     ></DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem @click="handleEdit(account)"
-                        ><Edit class="mr-2 h-4 w-4" />编辑</DropdownMenuItem
+                        ><PencilSquareIcon class="mr-2 h-4 w-4" />编辑</DropdownMenuItem
                       >
                       <DropdownMenuItem
-                        ><Shield class="mr-2 h-4 w-4" />{{
+                        ><ShieldCheckIcon class="mr-2 h-4 w-4" />{{
                           account.status === "active" ? "禁用" : "启用"
                         }}</DropdownMenuItem
                       >
                       <DropdownMenuItem
                         v-if="account.role !== 'super_admin'"
                         class="text-destructive"
-                        ><Trash2 class="mr-2 h-4 w-4" />删除</DropdownMenuItem
+                        ><TrashIcon class="mr-2 h-4 w-4" />删除</DropdownMenuItem
                       >
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -320,7 +320,7 @@ function handleEdit(account: (typeof accounts)[0]) {
       </DialogContent>
     </Dialog>
 
-    <!-- Edit Dialog -->
+    <!-- PencilSquareIcon Dialog -->
     <Dialog v-model:open="editDialogOpen">
       <DialogContent>
         <DialogHeader

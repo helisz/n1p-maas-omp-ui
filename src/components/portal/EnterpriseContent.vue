@@ -2,15 +2,15 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import {
-  Search,
-  Building2,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  Eye,
-  ShieldCheck,
-  Lock,
-} from "lucide-vue-next";
+  MagnifyingGlassIcon,
+  BuildingOffice2Icon,
+  CheckCircleIcon,
+  ClockIcon,
+  XCircleIcon,
+  EyeIcon,
+  ShieldCheckIcon,
+  LockClosedIcon,
+} from "@heroicons/vue/24/outline";
 
 const enterprises = [
   {
@@ -75,26 +75,26 @@ const statusConfig: Record<
   {
     label: string;
     variant: "default" | "outline" | "secondary" | "destructive";
-    icon: typeof CheckCircle2;
+    icon: typeof CheckCircleIcon;
     color: string;
   }
 > = {
   verified: {
     label: "已认证",
     variant: "outline",
-    icon: CheckCircle2,
+    icon: CheckCircleIcon,
     color: "text-green-500",
   },
   pending: {
     label: "待审核",
     variant: "outline",
-    icon: Clock,
+    icon: ClockIcon,
     color: "text-yellow-500",
   },
   frozen: {
     label: "已冻结",
     variant: "secondary",
-    icon: XCircle,
+    icon: XCircleIcon,
     color: "text-red-500",
   },
 };
@@ -186,7 +186,7 @@ const stats = computed(() => ({
         <div class="flex items-center justify-between">
           <CardTitle>企业列表</CardTitle>
           <div class="relative">
-            <Search
+            <MagnifyingGlassIcon
               class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
             />
             <Input
@@ -233,10 +233,10 @@ const stats = computed(() => ({
               </TableCell>
               <TableCell>
                 <Badge v-if="ent.uKeyBound" variant="outline" class="gap-1">
-                  <ShieldCheck class="h-3 w-3 text-green-500" />已绑定
+                  <ShieldCheckIcon class="h-3 w-3 text-green-500" />已绑定
                 </Badge>
                 <Badge v-else variant="outline" class="gap-1">
-                  <Lock class="h-3 w-3 text-muted-foreground" />未绑定
+                  <LockClosedIcon class="h-3 w-3 text-muted-foreground" />未绑定
                 </Badge>
               </TableCell>
               <TableCell class="text-muted-foreground">{{
@@ -248,7 +248,7 @@ const stats = computed(() => ({
                     variant="ghost"
                     size="sm"
                     @click="handleViewDetail(ent)"
-                    ><Eye class="mr-1 h-3 w-3" />详情</Button
+                    ><EyeIcon class="mr-1 h-3 w-3" />详情</Button
                   >
                   <Button v-if="ent.status === 'pending'" size="sm"
                     >审核</Button
@@ -328,10 +328,10 @@ const stats = computed(() => ({
               variant="outline"
               class="gap-1"
             >
-              <ShieldCheck class="h-3 w-3 text-green-500" />已绑定
+              <ShieldCheckIcon class="h-3 w-3 text-green-500" />已绑定
             </Badge>
             <Badge v-else variant="outline" class="gap-1">
-              <Lock class="h-3 w-3 text-muted-foreground" />未绑定
+              <LockClosedIcon class="h-3 w-3 text-muted-foreground" />未绑定
             </Badge>
           </div>
           <div class="flex justify-between">

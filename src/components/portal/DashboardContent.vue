@@ -2,17 +2,17 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import {
-  ShoppingCart,
-  Building2,
-  Receipt,
-  Activity,
-  ArrowRight,
-  Package,
-  TrendingUp,
-  CheckCircle2,
-  AlertTriangle,
-  Clock,
-} from "lucide-vue-next";
+  ShoppingCartIcon,
+  BuildingOffice2Icon,
+  ReceiptPercentIcon,
+  PresentationChartLineIcon,
+  ArrowRightIcon,
+  CubeIcon,
+  ArrowTrendingUpIcon,
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  ClockIcon,
+} from "@heroicons/vue/24/outline";
 
 const router = useRouter();
 
@@ -21,7 +21,7 @@ const stats = [
     title: "今日订单",
     value: "12",
     unit: "笔",
-    icon: ShoppingCart,
+    icon: ShoppingCartIcon,
     change: "+3",
     changeLabel: "较昨日",
   },
@@ -29,7 +29,7 @@ const stats = [
     title: "新增客户",
     value: "3",
     unit: "家",
-    icon: Building2,
+    icon: BuildingOffice2Icon,
     change: "+1",
     changeLabel: "较昨日",
   },
@@ -37,7 +37,7 @@ const stats = [
     title: "本月收入",
     value: "¥128,456",
     unit: "",
-    icon: Receipt,
+    icon: ReceiptPercentIcon,
     change: "+12.5%",
     changeLabel: "较上月",
   },
@@ -45,7 +45,7 @@ const stats = [
     title: "API 总调用",
     value: "856,432",
     unit: "次",
-    icon: Activity,
+    icon: PresentationChartLineIcon,
     change: "+8.2%",
     changeLabel: "较昨日",
   },
@@ -55,25 +55,25 @@ const quickActions = [
   {
     title: "订单管理",
     description: "查看和处理客户订单",
-    icon: ShoppingCart,
+    icon: ShoppingCartIcon,
     href: "/orders",
   },
   {
     title: "企业客户",
     description: "管理企业客户与认证",
-    icon: Building2,
+    icon: BuildingOffice2Icon,
     href: "/enterprise",
   },
   {
     title: "套餐管理",
     description: "配置服务套餐与定价",
-    icon: Package,
+    icon: CubeIcon,
     href: "/packages",
   },
   {
     title: "账单管理",
     description: "查看账单与发票申请",
-    icon: Receipt,
+    icon: ReceiptPercentIcon,
     href: "/billing",
   },
 ];
@@ -133,7 +133,7 @@ function navigate(href: string) {
       </div>
       <div class="flex items-center gap-2">
         <Badge variant="outline" class="gap-1">
-          <Clock class="h-3 w-3" />
+          <ClockIcon class="h-3 w-3" />
           数据更新于 10:00
         </Badge>
       </div>
@@ -156,7 +156,7 @@ function navigate(href: string) {
           <div
             class="mt-1 flex items-center gap-1 text-xs text-muted-foreground"
           >
-            <TrendingUp class="h-3 w-3 text-green-500" />
+            <ArrowTrendingUpIcon class="h-3 w-3 text-green-500" />
             <span class="text-green-500">{{ stat.change }}</span>
             <span>{{ stat.changeLabel }}</span>
           </div>
@@ -191,7 +191,7 @@ function navigate(href: string) {
                 </div>
               </div>
             </div>
-            <ArrowRight class="h-4 w-4 text-muted-foreground" />
+            <ArrowRightIcon class="h-4 w-4 text-muted-foreground" />
           </button>
         </CardContent>
       </Card>
@@ -250,14 +250,14 @@ function navigate(href: string) {
             </div>
             <div class="flex items-center gap-2">
               <Badge v-if="task.count > 0" variant="outline" class="gap-1">
-                <AlertTriangle
+                <ExclamationTriangleIcon
                   v-if="task.count >= 5"
                   class="h-3 w-3 text-red-500"
                 />
-                <CheckCircle2 v-else class="h-3 w-3 text-yellow-500" />
+                <CheckCircleIcon v-else class="h-3 w-3 text-yellow-500" />
                 {{ task.count }} 项
               </Badge>
-              <ArrowRight class="h-4 w-4 text-muted-foreground" />
+              <ArrowRightIcon class="h-4 w-4 text-muted-foreground" />
             </div>
           </div>
         </div>

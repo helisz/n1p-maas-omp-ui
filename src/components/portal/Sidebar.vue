@@ -4,53 +4,53 @@ import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard,
-  Package,
-  ShoppingCart,
-  Brain,
-  Wallet,
-  Receipt,
-  FileText,
-  Building2,
-  Activity,
-  ChevronLeft,
-  Search,
-} from "lucide-vue-next";
+  Squares2X2Icon,
+  CubeIcon,
+  ShoppingCartIcon,
+  SparklesIcon,
+  WalletIcon,
+  ReceiptPercentIcon,
+  DocumentTextIcon,
+  BuildingOffice2Icon,
+  PresentationChartLineIcon,
+  ChevronLeftIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/vue/24/outline";
 
 const route = useRoute();
 const router = useRouter();
 const collapsed = ref(false);
 const menuGroups = [
   {
-    items: [{ title: "控制台首页", href: "/dashboard", icon: LayoutDashboard }],
+    items: [{ title: "控制台首页", href: "/dashboard", icon: Squares2X2Icon }],
   },
   {
     label: "服务管理",
     items: [
-      { title: "套餐管理", href: "/packages", icon: Package },
-      { title: "模型管理", href: "/models", icon: Brain },
+      { title: "套餐管理", href: "/packages", icon: CubeIcon },
+      { title: "模型管理", href: "/models", icon: SparklesIcon },
     ],
   },
   {
     label: "交易管理",
-    items: [{ title: "订单管理", href: "/orders", icon: ShoppingCart }],
+    items: [{ title: "订单管理", href: "/orders", icon: ShoppingCartIcon }],
   },
   {
     label: "财务中心",
     items: [
-      { title: "资金管理", href: "/wallet", icon: Wallet },
-      { title: "账单管理", href: "/billing", icon: Receipt },
+      { title: "资金管理", href: "/wallet", icon: WalletIcon },
+      { title: "账单管理", href: "/billing", icon: ReceiptPercentIcon },
     ],
   },
   {
     label: "客户管理",
-    items: [{ title: "企业客户", href: "/enterprise", icon: Building2 }],
+    items: [{ title: "企业客户", href: "/enterprise", icon: BuildingOffice2Icon }],
   },
   {
     label: "运营监控",
     items: [
-      { title: "用量监控", href: "/usage", icon: Activity },
-      { title: "审计日志", href: "/audit", icon: FileText },
+      { title: "用量监控", href: "/usage", icon: PresentationChartLineIcon },
+      { title: "审计日志", href: "/audit", icon: DocumentTextIcon },
     ],
   },
 ];
@@ -106,10 +106,10 @@ function navigate(href: string) {
       </div>
     </div>
 
-    <!-- Search -->
+    <!-- MagnifyingGlassIcon -->
     <div v-if="!collapsed" class="border-r bg-sidebar p-3">
       <div class="relative">
-        <Search
+        <MagnifyingGlassIcon
           class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
         />
         <Input
@@ -157,7 +157,7 @@ function navigate(href: string) {
         @click="collapsed = !collapsed"
         class="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
       >
-        <ChevronLeft
+        <ChevronLeftIcon
           :class="cn('h-4 w-4 transition-transform', collapsed && 'rotate-180')"
         />
         <span v-if="!collapsed">收起菜单</span>

@@ -30,15 +30,15 @@ import SelectTrigger from "@/components/ui/select/SelectTrigger.vue";
 import SelectContent from "@/components/ui/select/SelectContent.vue";
 import SelectItem from "@/components/ui/select/SelectItem.vue";
 import {
-  Activity,
-  TrendingUp,
-  Users,
-  Clock,
-  Search,
-  Brain,
-  AlertTriangle,
-  CheckCircle2,
-} from "lucide-vue-next";
+  PresentationChartLineIcon,
+  ArrowTrendingUpIcon,
+  UsersIcon,
+  ClockIcon,
+  MagnifyingGlassIcon,
+  SparklesIcon,
+  ExclamationTriangleIcon,
+  CheckCircleIcon,
+} from "@heroicons/vue/24/outline";
 
 ChartJS.register(
   Title,
@@ -50,10 +50,10 @@ ChartJS.register(
 );
 
 const stats = [
-  { title: "今日总调用", value: "128,456", icon: Activity, change: "+8.5%" },
-  { title: "本周总调用", value: "856,432", icon: TrendingUp, change: "+12.3%" },
-  { title: "活跃客户数", value: "45", icon: Users, change: "+2" },
-  { title: "平均延迟", value: "245", unit: "ms", icon: Clock, change: "-5%" },
+  { title: "今日总调用", value: "128,456", icon: PresentationChartLineIcon, change: "+8.5%" },
+  { title: "本周总调用", value: "856,432", icon: ArrowTrendingUpIcon, change: "+12.3%" },
+  { title: "活跃客户数", value: "45", icon: UsersIcon, change: "+2" },
+  { title: "平均延迟", value: "245", unit: "ms", icon: ClockIcon, change: "-5%" },
 ];
 
 const trendDataMap: Record<string, { date: string; calls: number }[]> = {
@@ -539,7 +539,7 @@ const filteredModels = computed(() =>
           </div>
           <div class="flex items-center gap-3">
             <div class="relative">
-              <Search
+              <MagnifyingGlassIcon
                 class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
               />
               <Input
@@ -588,10 +588,10 @@ const filteredModels = computed(() =>
                   variant="outline"
                   class="gap-1"
                 >
-                  <CheckCircle2 class="h-3 w-3 text-green-500" />正常
+                  <CheckCircleIcon class="h-3 w-3 text-green-500" />正常
                 </Badge>
                 <Badge v-else variant="outline" class="gap-1">
-                  <AlertTriangle class="h-3 w-3 text-yellow-500" />告警
+                  <ExclamationTriangleIcon class="h-3 w-3 text-yellow-500" />告警
                 </Badge>
               </TableCell>
             </TableRow>
@@ -653,10 +653,10 @@ const filteredModels = computed(() =>
                   variant="outline"
                   class="gap-1"
                 >
-                  <CheckCircle2 class="h-3 w-3 text-green-500" />正常
+                  <CheckCircleIcon class="h-3 w-3 text-green-500" />正常
                 </Badge>
                 <Badge v-else variant="outline" class="gap-1">
-                  <AlertTriangle class="h-3 w-3 text-yellow-500" />预警
+                  <ExclamationTriangleIcon class="h-3 w-3 text-yellow-500" />预警
                 </Badge>
               </TableCell>
             </TableRow>

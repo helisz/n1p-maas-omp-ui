@@ -2,15 +2,15 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import {
-  Search,
-  CheckCircle2,
-  Clock,
-  FileText,
-  TrendingUp,
-  AlertCircle,
-  Eye,
-  Download,
-} from "lucide-vue-next";
+  MagnifyingGlassIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  DocumentTextIcon,
+  ArrowTrendingUpIcon,
+  ExclamationCircleIcon,
+  EyeIcon,
+  ArrowDownTrayIcon,
+} from "@heroicons/vue/24/outline";
 
 const bills = [
   {
@@ -90,20 +90,20 @@ const statusConfig: Record<
   {
     label: string;
     variant: "default" | "outline" | "secondary" | "destructive";
-    icon: typeof CheckCircle2;
+    icon: typeof CheckCircleIcon;
     color: string;
   }
 > = {
   paid: {
     label: "已支付",
     variant: "outline",
-    icon: CheckCircle2,
+    icon: CheckCircleIcon,
     color: "text-green-500",
   },
   unpaid: {
     label: "待支付",
     variant: "outline",
-    icon: Clock,
+    icon: ClockIcon,
     color: "text-yellow-500",
   },
 };
@@ -113,20 +113,20 @@ const invoiceStatusConfig: Record<
   {
     label: string;
     variant: "default" | "outline" | "secondary" | "destructive";
-    icon: typeof CheckCircle2;
+    icon: typeof CheckCircleIcon;
     color: string;
   }
 > = {
   issued: {
     label: "已开具",
     variant: "outline",
-    icon: CheckCircle2,
+    icon: CheckCircleIcon,
     color: "text-green-500",
   },
   pending: {
     label: "待开具",
     variant: "outline",
-    icon: Clock,
+    icon: ClockIcon,
     color: "text-yellow-500",
   },
 };
@@ -224,7 +224,7 @@ const pendingInvoices = computed(
         <div class="flex items-center justify-between">
           <CardTitle>账单列表</CardTitle>
           <div class="relative">
-            <Search
+            <MagnifyingGlassIcon
               class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
             />
             <Input
@@ -277,10 +277,10 @@ const pendingInvoices = computed(
                     variant="ghost"
                     size="sm"
                     @click="handleViewBill(bill)"
-                    ><Eye class="mr-1 h-3 w-3" />详情</Button
+                    ><EyeIcon class="mr-1 h-3 w-3" />详情</Button
                   >
                   <Button variant="ghost" size="sm"
-                    ><Download class="mr-1 h-3 w-3" />导出</Button
+                    ><ArrowDownTrayIcon class="mr-1 h-3 w-3" />导出</Button
                   >
                 </div>
               </TableCell>

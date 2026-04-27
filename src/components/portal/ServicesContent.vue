@@ -2,18 +2,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
-  Key,
-  Eye,
-  EyeOff,
-  Copy,
-  RefreshCw,
-  AlertTriangle,
-  CheckCircle2,
-  Activity,
-  TrendingUp,
-  Clock,
-  Server,
-} from "lucide-vue-next";
+  KeyIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  DocumentDuplicateIcon,
+  ArrowPathIcon,
+  ExclamationTriangleIcon,
+  CheckCircleIcon,
+  PresentationChartLineIcon,
+  ArrowTrendingUpIcon,
+  ClockIcon,
+  ServerIcon,
+} from "@heroicons/vue/24/outline";
 
 const myPackages = [
   {
@@ -136,7 +136,7 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
                   <div
                     class="flex h-10 w-10 items-center justify-center rounded-lg bg-muted"
                   >
-                    <Server class="h-5 w-5" />
+                    <ServerIcon class="h-5 w-5" />
                   </div>
                   <div>
                     <CardTitle class="text-lg">{{ pkg.name }}</CardTitle>
@@ -150,10 +150,10 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
                   v-if="pkg.status === 'active'"
                   variant="outline"
                   class="gap-1"
-                  ><CheckCircle2 class="h-3 w-3 text-green-500" />运行中</Badge
+                  ><CheckCircleIcon class="h-3 w-3 text-green-500" />运行中</Badge
                 >
                 <Badge v-else variant="outline" class="gap-1"
-                  ><AlertTriangle class="h-3 w-3 text-red-500" />即将到期</Badge
+                  ><ExclamationTriangleIcon class="h-3 w-3 text-red-500" />即将到期</Badge
                 >
               </div>
             </CardHeader>
@@ -185,7 +185,7 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
                   size="icon"
                   class="h-6 w-6"
                   @click="copyToClipboard(pkg.apiEndpoint)"
-                  ><Copy class="h-3 w-3"
+                  ><DocumentDuplicateIcon class="h-3 w-3"
                 /></Button>
               </div>
               <div class="flex gap-2">
@@ -209,7 +209,7 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
                 <CardTitle>API 密钥管理</CardTitle
                 ><CardDescription>用于 API 接口调用的访问凭证</CardDescription>
               </div>
-              <Button><Key class="mr-2 h-4 w-4" />创建密钥</Button>
+              <Button><KeyIcon class="mr-2 h-4 w-4" />创建密钥</Button>
             </div>
           </CardHeader>
           <CardContent>
@@ -233,7 +233,7 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
                         size="icon"
                         class="h-6 w-6"
                         @click="copyToClipboard(key.accessKey)"
-                        ><Copy class="h-3 w-3"
+                        ><DocumentDuplicateIcon class="h-3 w-3"
                       /></Button>
                     </div>
                   </TableCell>
@@ -253,8 +253,8 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
                             showSecretKey === key.id ? null : key.id
                         "
                       >
-                        <Eye v-if="showSecretKey !== key.id" class="h-3 w-3" />
-                        <EyeOff v-else class="h-3 w-3" />
+                        <EyeIcon v-if="showSecretKey !== key.id" class="h-3 w-3" />
+                        <EyeSlashIcon v-else class="h-3 w-3" />
                       </Button>
                     </div>
                   </TableCell>
@@ -263,7 +263,7 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
                   }}</TableCell>
                   <TableCell
                     ><Badge variant="outline" class="gap-1"
-                      ><CheckCircle2
+                      ><CheckCircleIcon
                         class="h-3 w-3 text-green-500"
                       />正常</Badge
                     ></TableCell
@@ -273,7 +273,7 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
                       variant="ghost"
                       size="sm"
                       @click="handleResetKey(key)"
-                      ><RefreshCw class="mr-1 h-3 w-3" />重置</Button
+                      ><ArrowPathIcon class="mr-1 h-3 w-3" />重置</Button
                     >
                   </TableCell>
                 </TableRow>
@@ -295,7 +295,7 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
             <CardContent
               ><div class="text-2xl font-bold">6,800</div>
               <div class="flex items-center text-xs text-muted-foreground">
-                <TrendingUp class="mr-1 h-3 w-3 text-green-500" />较昨日 +8%
+                <ArrowTrendingUpIcon class="mr-1 h-3 w-3 text-green-500" />较昨日 +8%
               </div></CardContent
             >
           </Card>
@@ -367,7 +367,7 @@ function handleResetKey(key: (typeof apiKeys)[0]) {
                   <TableCell class="font-mono text-sm">{{ log.api }}</TableCell>
                   <TableCell
                     ><div class="flex items-center gap-2">
-                      <AlertTriangle class="h-4 w-4 text-yellow-500" />{{
+                      <ExclamationTriangleIcon class="h-4 w-4 text-yellow-500" />{{
                         log.error
                       }}
                     </div></TableCell

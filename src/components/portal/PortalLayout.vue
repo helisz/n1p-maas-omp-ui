@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { Loader2 } from 'lucide-vue-next'
+import { ArrowPathIcon } from "@heroicons/vue/24/outline"
 import Sidebar from './Sidebar.vue'
 import Header from './Header.vue'
 import { useAuthStore } from '@/stores/auth'
@@ -24,7 +24,7 @@ watch(
 
 <template>
   <div v-if="auth.isLoading || !auth.isLoggedIn" class="flex h-screen items-center justify-center bg-background">
-    <Loader2 class="h-6 w-6 animate-spin text-muted-foreground" />
+    <ArrowPathIcon class="h-6 w-6 animate-spin text-muted-foreground" />
   </div>
   <div v-else class="flex h-screen overflow-hidden">
     <Sidebar />

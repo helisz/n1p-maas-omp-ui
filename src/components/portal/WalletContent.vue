@@ -2,15 +2,15 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import {
-  Wallet,
-  Search,
-  ArrowUpRight,
-  ArrowDownRight,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  AlertTriangle,
-} from "lucide-vue-next";
+  WalletIcon,
+  MagnifyingGlassIcon,
+  ArrowTopRightOnSquareIcon,
+  ArrowTrendingDownIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  XCircleIcon,
+  ExclamationTriangleIcon,
+} from "@heroicons/vue/24/outline";
 
 const customerBalances = [
   { company: "华为云科技", balance: 52850.0, frozen: 0.0, status: "normal" },
@@ -76,26 +76,26 @@ const statusConfig: Record<
   {
     label: string;
     variant: "default" | "outline" | "secondary" | "destructive";
-    icon: typeof CheckCircle2;
+    icon: typeof CheckCircleIcon;
     class: string;
   }
 > = {
   success: {
     label: "成功",
     variant: "outline",
-    icon: CheckCircle2,
+    icon: CheckCircleIcon,
     class: "text-green-500",
   },
   pending: {
     label: "处理中",
     variant: "outline",
-    icon: Clock,
+    icon: ClockIcon,
     class: "text-yellow-500",
   },
   failed: {
     label: "失败",
     variant: "outline",
-    icon: XCircle,
+    icon: XCircleIcon,
     class: "text-red-500",
   },
 };
@@ -198,7 +198,7 @@ const stats = computed(() => ({
         <div class="flex items-center justify-between">
           <CardTitle>客户余额列表</CardTitle>
           <div class="relative">
-            <Search
+            <MagnifyingGlassIcon
               class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
             />
             <Input
@@ -231,10 +231,10 @@ const stats = computed(() => ({
                   variant="outline"
                   class="gap-1"
                 >
-                  <CheckCircle2 class="h-3 w-3 text-green-500" />正常
+                  <CheckCircleIcon class="h-3 w-3 text-green-500" />正常
                 </Badge>
                 <Badge v-else variant="outline" class="gap-1">
-                  <AlertTriangle class="h-3 w-3 text-yellow-500" />余额不足
+                  <ExclamationTriangleIcon class="h-3 w-3 text-yellow-500" />余额不足
                 </Badge>
               </TableCell>
               <TableCell class="text-right">
@@ -273,11 +273,11 @@ const stats = computed(() => ({
               <TableCell class="font-medium">{{ tx.company }}</TableCell>
               <TableCell>
                 <div class="flex items-center gap-1.5">
-                  <ArrowUpRight
+                  <ArrowTopRightOnSquareIcon
                     v-if="tx.amount > 0"
                     class="h-4 w-4 text-green-500"
                   />
-                  <ArrowDownRight v-else class="h-4 w-4 text-red-500" />
+                  <ArrowTrendingDownIcon v-else class="h-4 w-4 text-red-500" />
                   <span>{{ tx.type }}</span>
                 </div>
               </TableCell>
@@ -342,10 +342,10 @@ const stats = computed(() => ({
               variant="outline"
               class="gap-1"
             >
-              <CheckCircle2 class="h-3 w-3 text-green-500" />正常
+              <CheckCircleIcon class="h-3 w-3 text-green-500" />正常
             </Badge>
             <Badge v-else variant="outline" class="gap-1">
-              <AlertTriangle class="h-3 w-3 text-yellow-500" />余额不足
+              <ExclamationTriangleIcon class="h-3 w-3 text-yellow-500" />余额不足
             </Badge>
           </div>
         </div>

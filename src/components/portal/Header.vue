@@ -2,13 +2,13 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import {
-  Bell,
-  HelpCircle,
-  LogOut,
-  ChevronDown,
-  User,
-  Settings,
-} from "lucide-vue-next";
+  BellIcon,
+  QuestionMarkCircleIcon,
+  ArrowRightStartOnRectangleIcon,
+  ChevronDownIcon,
+  UserIcon,
+  Cog6ToothIcon,
+} from "@heroicons/vue/24/outline";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
@@ -37,7 +37,7 @@ const initials = auth.user?.name?.charAt(0) ?? "管";
         size="icon"
         class="relative text-white hover:bg-white/10 hover:text-white"
       >
-        <Bell class="h-4 w-4" />
+        <BellIcon class="h-4 w-4" />
         <Badge
           class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full p-0 text-[10px] leading-none"
         >
@@ -51,7 +51,7 @@ const initials = auth.user?.name?.charAt(0) ?? "管";
         size="icon"
         class="text-white hover:bg-white/10 hover:text-white"
       >
-        <HelpCircle class="h-4 w-4" />
+        <QuestionMarkCircleIcon class="h-4 w-4" />
       </Button>
 
       <!-- User Menu -->
@@ -74,7 +74,7 @@ const initials = auth.user?.name?.charAt(0) ?? "管";
                 auth.user?.role ?? "管理员"
               }}</span>
             </div>
-            <ChevronDown class="h-4 w-4 text-white/70" />
+            <ChevronDownIcon class="h-4 w-4 text-white/70" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" class="w-48">
@@ -88,11 +88,11 @@ const initials = auth.user?.name?.charAt(0) ?? "管";
           </div>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <User class="mr-2 h-4 w-4" />
+            <UserIcon class="mr-2 h-4 w-4" />
             <span>个人中心</span>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Settings class="mr-2 h-4 w-4" />
+            <Cog6ToothIcon class="mr-2 h-4 w-4" />
             <span>账号设置</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -100,7 +100,7 @@ const initials = auth.user?.name?.charAt(0) ?? "管";
             class="text-destructive focus:text-destructive"
             @click="handleLogout"
           >
-            <LogOut class="mr-2 h-4 w-4" />
+            <ArrowRightStartOnRectangleIcon class="mr-2 h-4 w-4" />
             <span>退出登录</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
