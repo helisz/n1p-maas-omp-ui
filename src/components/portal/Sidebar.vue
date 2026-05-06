@@ -44,7 +44,9 @@ const menuGroups = [
   },
   {
     label: "客户管理",
-    items: [{ title: "企业客户", href: "/enterprise", icon: BuildingOffice2Icon }],
+    items: [
+      { title: "企业客户", href: "/enterprise", icon: BuildingOffice2Icon },
+    ],
   },
   {
     label: "运营监控",
@@ -114,7 +116,7 @@ function navigate(href: string) {
         />
         <Input
           placeholder="搜索..."
-          class="h-9 pl-8 text-sm bg-muted/50 border-0"
+          class="h-9 pl-8 text-sm bg-muted/50 border-transparent focus-visible:border-ring shadow-sm transition"
         />
       </div>
     </div>

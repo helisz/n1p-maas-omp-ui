@@ -1,10 +1,8 @@
 import type { App, Plugin } from "vue";
-import * as UIComponents from "./ui";
-import * as SelectComponents from "./ui/select";
+import * as UIComponents from "./ui/index";
 
 const components: Record<string, unknown> = {
   ...UIComponents,
-  ...SelectComponents,
 };
 
 export function registerComponents(app: App): void {
