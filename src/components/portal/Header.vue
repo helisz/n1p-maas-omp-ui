@@ -1,105 +1,75 @@
 <!-- [AI_START TIMESTAMP=2025-06-20 06:30:00] -->
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import {
-  BellIcon,
-  QuestionMarkCircleIcon,
-  ArrowRightStartOnRectangleIcon,
-  ChevronDownIcon,
-  UserIcon,
-  Cog6ToothIcon,
-} from "@heroicons/vue/24/outline";
-import { useAuthStore } from "@/stores/auth";
+import { useRouter } from 'vue-router';
+import { BellIcon, QuestionMarkCircleIcon, ArrowRightStartOnRectangleIcon, ChevronDownIcon, UserIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
+import { useAuthStore } from '@/stores/auth';
 
 const router = useRouter();
 const auth = useAuthStore();
 
 function handleLogout() {
   auth.logout();
-  router.push("/");
+  router.push('/');
 }
 
-const initials = auth.user?.name?.charAt(0) ?? "管";
+const initials = auth.user?.name?.charAt(0) ?? '管';
 </script>
 
 <template>
-  <header
-    class="flex h-14 items-center justify-between border-b border-white/10 bg-black px-6 text-white"
-  >
+  <header class="flex h-14 items-center justify-between border-b border-white/10 bg-black px-6 text-white">
     <div class="flex items-center gap-2">
-      <!-- <h1 class="text-lg font-semibold text-foreground">应用运营管理平台</h1> -->
+      <slot name="logo" />
     </div>
 
     <div class="flex items-center gap-2">
       <!-- Notifications -->
-      <Button
-        variant="ghost"
-        size="icon"
-        class="relative text-white hover:bg-white/10 hover:text-white"
-      >
+      <Button variant="ghost" size="icon" class="relative text-white hover:bg-white/10 hover:text-white">
         <BellIcon class="h-4 w-4" />
-        <Badge
-          class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full p-0 text-[10px] leading-none"
-        >
-          3
-        </Badge>
+        <Badge class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full p-0 text-[10px] leading-none"> 3 </Badge>
       </Button>
 
       <!-- Help -->
-      <Button
-        variant="ghost"
-        size="icon"
-        class="text-white hover:bg-white/10 hover:text-white"
-      >
+      <Button variant="ghost" size="icon" class="text-white hover:bg-white/10 hover:text-white">
         <QuestionMarkCircleIcon class="h-4 w-4" />
       </Button>
 
       <!-- User Menu -->
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <Button
-            variant="ghost"
-            class="flex items-center gap-2 px-2 text-white hover:bg-white/10 hover:text-white"
-          >
+          <Button variant="ghost" class="flex items-center gap-2 px-2 text-white hover:bg-white/10 hover:text-white">
             <Avatar size="sm">
-              <AvatarFallback class="bg-white text-primary text-xs">
+              <img v-if="auth.user?.avatar" :src="auth.user.avatar" alt="头像" class="h-full w-full rounded-full object-cover" />
+              <AvatarFallback class="text-primary bg-white text-xs">
                 {{ initials }}
               </AvatarFallback>
             </Avatar>
             <div class="flex flex-col items-start text-xs">
-              <span class="font-medium">{{
-                auth.user?.name ?? "运营管理员"
-              }}</span>
-              <span class="text-white/70">{{
-                auth.user?.role ?? "管理员"
-              }}</span>
+              <span class="font-medium">{{ auth.user?.name ?? '运营管理员' }}</span>
+              <span class="text-white/70">{{ auth.user?.role ?? '管理员' }}</span>
             </div>
             <ChevronDownIcon class="h-4 w-4 text-white/70" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" class="w-48">
           <div class="px-2 py-1.5">
-            <p class="text-xs font-medium text-foreground">
+            <p class="text-foreground text-xs font-medium">
               {{ auth.user?.name }}
             </p>
-            <p class="text-xs text-muted-foreground truncate">
-              {{ auth.user?.email ?? "" }}
+            <p class="text-muted-foreground truncate text-xs">
+              {{ auth.user?.email ?? '' }}
             </p>
           </div>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem @click="router.push('/profile')">
             <UserIcon class="mr-2 h-4 w-4" />
             <span>个人中心</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem @click="router.push('/profile')">
             <Cog6ToothIcon class="mr-2 h-4 w-4" />
             <span>账号设置</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            class="text-destructive focus:text-destructive"
-            @click="handleLogout"
-          >
+          <DropdownMenuItem class="text-destructive focus:text-destructive" @click="handleLogout">
             <ArrowRightStartOnRectangleIcon class="mr-2 h-4 w-4" />
             <span>退出登录</span>
           </DropdownMenuItem>
