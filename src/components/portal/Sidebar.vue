@@ -15,9 +15,10 @@ const menuGroups = [
   {
     label: '用户和企业管理',
     items: [
+      { title: '用户账号管理', href: '/user-accounts', icon: UserGroupIcon },
+
       { title: '企业管理', href: '/enterprise', icon: BuildingOffice2Icon },
       // [AI_START TIMESTAMP=2025-07-18 13:00:00]
-      { title: '用户账号管理', href: '/user-accounts', icon: UserGroupIcon },
       // [AI_END LINES=1 TIMESTAMP=2025-07-18 13:00:00]
     ],
   },
