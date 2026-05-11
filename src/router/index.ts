@@ -57,6 +57,14 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/EnterpriseView.vue'),
     meta: { requiresAuth: true },
   },
+  // [AI_START TIMESTAMP=2025-07-18 13:00:00]
+  {
+    path: '/user-accounts',
+    name: 'UserAccounts',
+    component: () => import('@/views/UserAccountsView.vue'),
+    meta: { requiresAuth: true },
+  },
+  // [AI_END LINES=6 TIMESTAMP=2025-07-18 13:00:00]
   // [AI_START TIMESTAMP=2025-07-16 06:10:00]
   {
     path: '/services/subscribed',

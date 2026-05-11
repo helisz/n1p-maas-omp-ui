@@ -3,7 +3,7 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { cn } from '@/lib/utils';
-import { Squares2X2Icon, CubeIcon, ShoppingCartIcon, SparklesIcon, WalletIcon, ReceiptPercentIcon, DocumentTextIcon, BuildingOffice2Icon, PresentationChartLineIcon, ChevronLeftIcon, MagnifyingGlassIcon, CheckBadgeIcon } from '@heroicons/vue/24/outline';
+import { Squares2X2Icon, CubeIcon, ShoppingCartIcon, SparklesIcon, WalletIcon, ReceiptPercentIcon, DocumentTextIcon, BuildingOffice2Icon, PresentationChartLineIcon, ChevronLeftIcon, MagnifyingGlassIcon, CheckBadgeIcon, UserGroupIcon } from '@heroicons/vue/24/outline';
 
 const route = useRoute();
 const router = useRouter();
@@ -11,6 +11,15 @@ const collapsed = ref(false);
 const menuGroups = [
   {
     items: [{ title: '控制台首页', href: '/dashboard', icon: Squares2X2Icon }],
+  },
+  {
+    label: '用户和企业管理',
+    items: [
+      { title: '企业管理', href: '/enterprise', icon: BuildingOffice2Icon },
+      // [AI_START TIMESTAMP=2025-07-18 13:00:00]
+      { title: '用户账号管理', href: '/user-accounts', icon: UserGroupIcon },
+      // [AI_END LINES=1 TIMESTAMP=2025-07-18 13:00:00]
+    ],
   },
   {
     label: '服务管理',
@@ -33,10 +42,7 @@ const menuGroups = [
       { title: '账单管理', href: '/billing', icon: ReceiptPercentIcon },
     ],
   },
-  {
-    label: '客户管理',
-    items: [{ title: '企业客户', href: '/enterprise', icon: BuildingOffice2Icon }],
-  },
+
   {
     label: '运营监控',
     items: [
