@@ -1151,7 +1151,7 @@ const computedPremium = computed(() => {
           </div>
         </div>
 
-        <DialogFooter class="gap-2 sm:gap-0">
+        <DialogFooter class="sm:gap-0 md:gap-2">
           <Button variant="outline" @click="detailOpen = false">关闭</Button>
           <Button variant="outline"><PencilSquareIcon class="mr-1 h-4 w-4" />编辑模型</Button>
         </DialogFooter>

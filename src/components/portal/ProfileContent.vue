@@ -72,11 +72,6 @@ const initials = auth.user?.name?.charAt(0) ?? '管';
           </div>
           <input ref="avatarFileInput" type="file" accept="image/*" class="hidden" @change="onAvatarChange" />
           <h3 class="mt-4 text-lg font-semibold">{{ auth.user?.name ?? '张三' }}</h3>
-          <p class="text-muted-foreground text-sm">{{ auth.user?.company ?? '应用运营管理平台' }}</p>
-          <Badge variant="outline" class="mt-2 gap-1 border-green-200 bg-green-50 text-green-700">
-            <ShieldCheckIcon class="h-3 w-3" />
-            已认证
-          </Badge>
           <Separator class="my-4 w-full" />
           <div class="w-full space-y-3">
             <div class="flex items-center gap-2 text-sm">

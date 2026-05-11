@@ -23,7 +23,7 @@ function goDashboard() {
               <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.55" stroke-linecap="round" stroke-linejoin="round" />
               <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.3" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-            <span class="text-sm font-semibold whitespace-nowrap"> 应用运营管理平台 </span>
+            <span class="text-sm font-semibold whitespace-nowrap"> 应用运营管理门户 </span>
           </div>
         </div>
       </template>

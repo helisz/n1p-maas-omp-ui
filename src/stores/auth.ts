@@ -112,7 +112,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const demoUser: User = {
       name: '管理员',
-      company: '应用运营管理平台',
+      company: '应用运营管理门户',
       role: '管理员',
       email: 'admin@example.com',
     };
