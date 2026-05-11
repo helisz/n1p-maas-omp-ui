@@ -666,7 +666,7 @@ const computedPremium = computed(() => {
                   <SelectValue placeholder="全部提供方" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="全部提供方">全部提供方</SelectItem>
+                  <SelectItem value="全部">全部提供方</SelectItem>
                   <SelectItem v-for="p in providers" :key="p" :value="p">{{ p }}</SelectItem>
                 </SelectContent>
               </Select>
