@@ -321,7 +321,7 @@ function usagePercent(sub: SubscribedPackage): number {
                   </div>
                   <div>
                     <div class="font-medium">{{ sub.enterpriseName }}</div>
-                    <div class="text-muted-foreground font-mono text-xs">
+                    <div class="text-muted-foreground text-xs">
                       {{ sub.enterpriseId }}
                     </div>
                   </div>
@@ -420,7 +420,7 @@ function usagePercent(sub: SubscribedPackage): number {
           <div class="grid grid-cols-2 gap-4">
             <div>
               <span class="text-muted-foreground text-sm">订阅编号</span>
-              <div class="font-mono text-sm">
+              <div class="text-sm">
                 {{ selectedSubscription.id }}
               </div>
             </div>
